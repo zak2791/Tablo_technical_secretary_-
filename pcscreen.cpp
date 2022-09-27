@@ -13,6 +13,7 @@
 #include <QFileDialog>
 #include <QTime>
 #include "pcscreen.h"
+#include "udpclient.h"
 
 #include <math.h>
 
@@ -23,6 +24,10 @@
 
 //#include <QHostAddress>
 //#include <QNetworkInterface>
+#include "tcpserver.h"
+#include <QSqlDatabase>
+#include <QSqlQuery>
+#include <QSqlError>
 
 WidgetFilter::WidgetFilter(QObject* pobj) : QObject(pobj){
     qDebug()<<"constructor event";
@@ -87,6 +92,59 @@ PCScreen::PCScreen(QWidget * parent) : QWidget(parent){
     //fam_blue->setObjectName("fam_blue");
     //reg_blue = new Fam(col_blue, "", 10, "Lucida Console");
     //reg_blue->setObjectName("reg_blue");
+
+    QFile baza_in("baza_in.db");
+    if(!baza_in.exists()){
+        QSqlDatabase db = QSqlDatabase::addDatabase ("QSQLITE");
+        db.setDatabaseName("baza_in.db");
+        if(!db.open())
+            qDebug()<<"error open database1";
+        QSqlQuery query;
+        QString sql =   "CREATE TABLE rounds ("
+                        "id INTEGER PRIMARY KEY AUTOINCREMENT, "
+                        "num_round INTEGER, "
+                        "name_round TEXT, "
+                        "name_red TEXT, "
+                        "name_blue TEXT, "
+                        "note_red TEXT, "
+                        "note_blue TEXT, "
+                        "num_fight INTEGER); ";
+        if(!query.exec(sql)){
+            qDebug()<<"error database2"<<query.lastError();
+            db.close();
+            return;
+        }
+        sql =           "CREATE TABLE referees ( "
+                        "id INTEGER PRIMARY KEY AUTOINCREMENT, "
+                        "id_fight INTEGER, "
+                        "ref1 TEXT, "
+                        "ref2 TEXT, "
+                        "ref3 TEXT);";
+        if(!query.exec(sql)){
+            qDebug()<<"error database22"<<query.lastError();
+            db.close();
+            return;
+        }
+        db.close();
+    }
+    QFile baza_out("baza_out.db");
+    if(!baza_out.exists()){
+        QSqlDatabase db = QSqlDatabase::addDatabase ("QSQLITE");
+        db.setDatabaseName("baza_out.db");
+        if(!db.open())
+            qDebug()<<"error open database3";
+        QSqlQuery query;
+        QString sql = "CREATE TABLE rounds ( "
+              "id INTEGER PRIMARY KEY AUTOINCREMENT, "
+              "fight INTEGER, "
+              "result BLOB)";
+        if(!query.exec(sql)){
+            qDebug()<<"error database4"<<query.lastError();;
+            db.close();
+            return;
+        }
+        db.close();
+    }
 
     QPushButton * btnParter_red = new QPushButton(u8"ПАРТЕР", this);
     btnParter_red->setObjectName("btnParter_red");
@@ -536,6 +594,82 @@ PCScreen::PCScreen(QWidget * parent) : QWidget(parent){
     connect(tmr, SIGNAL(timeout()), this, SLOT(drawTvScreenshot()));
     tmr->start(100);
 
+    QFile mat("mat.txt");
+    if(!mat.exists()){
+        mat.open(QFile::WriteOnly);
+        mat.write("1");
+        mat.close();
+    }
+    mat.open(QFile::ReadOnly | QFile::Text);
+    smat = mat.read(1);
+    int imat =  smat.toInt();
+    mat.close();
+    secr->setMat(smat);
+
+    //QThread* udpThread = new QThread;
+    UdpClient* udp = new UdpClient(imat);
+    //udp->moveToThread(udpThread);
+    //connect(udpThread, SIGNAL(started()), udp, SLOT(Process()));
+    connect(udp, SIGNAL(conn(int)), this, SLOT(connUdp(int)));
+    //udpThread->start();
+
+
+    //QThread* serverThread = new QThread;
+    TcpServer* tcp_server = new TcpServer(imat);
+    //udp_server->moveToThread(serverThread);
+    //connect(serverThread, SIGNAL(started()), udp_server, SLOT(Process()));
+    //serverThread->start();
+    //connect(udp_server, SIGNAL(conn(int)), this, SLOT(connUdp(int)));
+
+    setFocusPolicy(Qt::StrongFocus);
+
+    connect(mainTimer,  SIGNAL(past_time(QString)),              secr, SLOT(pastTime(QString)));
+    connect(secr,       SIGNAL(change_rate(int, int, int, int)), this, SLOT(setRates(int, int, int, int)));
+    connect(secr,       SIGNAL(change_prav(int, QString)),       this, SLOT(setPrav(int, QString)));
+    connect(secr,       SIGNAL(change_vyh(int, QString)),        this, SLOT(setVyh(int, QString)));
+    connect(secr,       SIGNAL(set_plus(int, QString)),          this, SLOT(setPlus(int, QString)));
+
+
+}
+
+void PCScreen::setPlus(int rb, QString p){
+    if(rb)
+        plus_blue->setData(p);
+    else
+        plus_red->setData(p);
+    qDebug()<<p;
+}
+
+void PCScreen::setVyh(int rb, QString v){
+    if(rb)
+        nv_red->setValue(v);
+    else
+        nv_blue->setValue(v);
+}
+
+void PCScreen::setPrav(int rb, QString p){
+    if(rb)
+        np_red->setValue(p);
+    else
+        np_blue->setValue(p);
+}
+
+void PCScreen::setRates(int rb, int bb, int ra, int ba){
+    rateRed->setRate(rb);
+    rateBlue->setRate(bb);
+    actRed->setRate(ra);
+    actBlue->setRate(ba);
+}
+
+void PCScreen::connUdp(int i){
+    if(i != 1){
+        winConnect->setStyleSheet("QLabel{border-style: solid; border-color: red; border-width: 2px; border-radius: 5px; background-color: black; color: red; font: bold}");
+        winConnect->setText("нет\nсоединения");
+    }
+    else{
+        winConnect->setStyleSheet("QLabel{border-style: solid; border-color: lightgreen; border-width: 2px; border-radius: 5px; background-color: black; color: lightgreen; font: bold}");
+        winConnect->setText("Соединено\nc ковром " + smat);
+    }
 }
 
 void PCScreen::setCat(QString s){

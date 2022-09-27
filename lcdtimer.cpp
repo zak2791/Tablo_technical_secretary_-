@@ -33,6 +33,7 @@ LCDTimer::LCDTimer(QWidget *parent,
     setAutoFillBackground(true);
 
     setDigitCount(4);
+    pastTime = QTime(0, 0, 0, 0);
     Reset();
 
 }
@@ -70,6 +71,7 @@ void LCDTimer::Reset(){
         QString sTime = intTimeToStr(intInitTime);
         display(sTime);
         emit sigTime(sTime, palette());
+        pastTime = QTime(0, 0, 0, 0);
         sigReset();
     }
 }
@@ -86,6 +88,9 @@ void LCDTimer::showTime(){
 
     QString sTime = intTimeToStr(time);
     display(sTime);
+    pastTime = pastTime.addSecs(1);
+    QString ps = pastTime.toString("mm:ss");
+    past_time(ps);
     emit sigTime(sTime, palette());
 }
 

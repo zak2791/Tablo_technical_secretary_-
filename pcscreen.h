@@ -61,6 +61,10 @@ public slots:
     void setSpace(int);
     void setSec(int);
     void setTime(void);
+    void setPlus(int, QString);
+    void setVyh(int, QString);
+    void setPrav(int, QString);
+    void setRates(int, int, int, int);
 
 private slots:
     void setCam(void);
@@ -86,6 +90,8 @@ private slots:
 
     void setCat(QString);
 
+    void connUdp(int);
+
 private:
     QWidget * formView;
     QWidget * frmTime;
@@ -99,15 +105,8 @@ private:
     virtual void resizeEvent(QResizeEvent *);
 
     QLabel* winConnect;
-
-    //void process_line(int, QString);
-
-    //QLabel * flag_blue;
-    //QLabel * flag_red;
     QString col_red;
     QString col_blue;
-    //QEvent * ev_L;
-    //QEvent * ev_R;
     int minimum_height_family;
     int minimum_height_region;
     QGridLayout * grid;
@@ -168,6 +167,8 @@ private:
     QThread* cam2Thread;
 
     QPointer<CameraConnection> camConn;
+
+    QString smat;
 
 };
 

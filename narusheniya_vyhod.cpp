@@ -90,7 +90,7 @@ void NV::setValue(QString b) {
 		setStyleSheet(style);
 	}
 }
-
+/*
 void NV::mousePressEvent(QMouseEvent *  pe) {
 	if (pe->buttons() == Qt::LeftButton)
 		plus();
@@ -98,7 +98,7 @@ void NV::mousePressEvent(QMouseEvent *  pe) {
 		minus();
 	//emit change_nv(bl);
 }
-
+*/
 void NV::resizeEvent(QResizeEvent * ) {
 	QFont fnt;
 	fnt.setWeight(50);

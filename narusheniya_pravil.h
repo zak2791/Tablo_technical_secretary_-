@@ -41,7 +41,7 @@ private:
 	void plus();
 	void minus();
 	
-	virtual void mousePressEvent(QMouseEvent *);
+    //virtual void mousePressEvent(QMouseEvent *);
 	virtual void resizeEvent(QResizeEvent *);
 	QString bl, style, style_red, style_yellow, style_green;
 	

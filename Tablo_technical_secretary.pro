@@ -5,7 +5,7 @@ QMAKE_CXXFLAGS_RELEASE -= -O0
 
 RC_ICONS = appico.ico
 
-QT       += core gui network qml
+QT       += core gui network qml sql
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -22,6 +22,8 @@ SOURCES += \
     cameraviewer.cpp \
     category.cpp \
     fam_reg.cpp \
+    fight.cpp \
+    fightqueue.cpp \
     lcdstopwatch.cpp \
     lcdtimer.cpp \
     main.cpp \
@@ -31,9 +33,13 @@ SOURCES += \
     player.cpp \
     playerviewer.cpp \
     plus.cpp \
+    protocolnames.cpp \
+    protocolrates.cpp \
     protocolwindow.cpp \
     rate.cpp \
-    tvscreen.cpp
+    tcpserver.cpp \
+    tvscreen.cpp \
+    udpclient.cpp
 
 HEADERS += \
     JSTools.h \
@@ -42,6 +48,8 @@ HEADERS += \
     cameraviewer.h \
     category.h \
     fam_reg.h \
+    fight.h \
+    fightqueue.h \
     lcdstopwatch.h \
     lcdtimer.h \
     narusheniya_pravil.h \
@@ -50,9 +58,13 @@ HEADERS += \
     player.h \
     playerviewer.h \
     plus.h \
+    protocolnames.h \
+    protocolrates.h \
     protocolwindow.h \
     rate.h \
-    tvscreen.h
+    tcpserver.h \
+    tvscreen.h \
+    udpclient.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

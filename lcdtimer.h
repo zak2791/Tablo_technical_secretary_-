@@ -6,6 +6,7 @@
 #include <QPalette>
 #include <QTimer>
 #include "qt_windows.h"
+#include <QTime>
 
 class LCDTimer : public QLCDNumber
 {
@@ -36,6 +37,7 @@ private:
 
     bool visible = false;
     //QString strInitTime;
+    QTime pastTime;
     int strTimeToInt(QString);
     int getStatus(void);
     bool getVisible(void);
@@ -70,6 +72,7 @@ signals:
     void sigStarted(bool);
     void sigReset(void);
     void sigVisible(bool);
+    void past_time(QString);
 
 };
 

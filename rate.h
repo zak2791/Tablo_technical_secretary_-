@@ -23,7 +23,7 @@ public slots:
     void setViewStyle(int, int);
 
 private:
-    virtual void mousePressEvent(QMouseEvent *);
+    //virtual void mousePressEvent(QMouseEvent *);
     virtual void resizeEvent(QResizeEvent *);
     int rate = 0;
     QFont largeFont, smallFont;

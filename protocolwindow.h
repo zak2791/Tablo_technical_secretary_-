@@ -2,21 +2,48 @@
 #define PROTOCOLWINDOW_H
 
 #include <QGraphicsView>
+#include <QPushButton>
+#include <QMouseEvent>
+#include <QGraphicsItem>
+#include "protocolrates.h"
+#include <QMessageBox>
+#include <fightqueue.h>
+#include "protocolrates.h"
+#include "protocolnames.h"
+#include <QLabel>
+#include <QGridLayout>
+#include <QDebug>
+#include <QTcpSocket>
+#include <QHostAddress>
 
 class TcpClient : public QObject
 {
-
+    Q_OBJECT
 
 private:
-    QString data;
+    QByteArray data;
     QString address;
+    int mat;
 
 public:
-    TcpClient(QString _data, QString _address, QWidget* parent){
+    TcpClient(QByteArray _data, QString _address, int _mat, QWidget* parent) : QObject(parent)
+    {
         data = _data;
+        address = _address;
+        mat = _mat;
     }
-    /*
-    def run(self):
+
+public slots:
+    void run(void){
+        QTcpSocket* tcp = new QTcpSocket(this);
+        tcp->connectToHost(QHostAddress(address), mat * 2000 + 3);
+        if (tcp->waitForConnected(100)){
+            qDebug("Connected!");
+            tcp->write(data);
+        }
+        tcp->close();
+
+        /*
         sock = socket.socket()
         sock.settimeout(0.1)
         try:
@@ -27,15 +54,197 @@ public:
         finally:
             sock.close()
             */
+    }
+
 };
 
+class LeftRightPushButton : public QPushButton
+{
+    Q_OBJECT
 
+public:
+    LeftRightPushButton(QString title, QWidget* parent = nullptr) : QPushButton(title, parent)
+    {
 
-class ProtocolWindow : public QGraphicsView
+    }
+
+private:
+    void mouseReleaseEvent(QMouseEvent* e){
+        if(e->button() == Qt::LeftButton)
+            left_right_clicked(false, this->objectName());
+        else if(e->button() == Qt::RightButton)
+            left_right_clicked(true, this->objectName());
+    }
+
+signals:
+    void left_right_clicked(bool, QString);
+
+};
+
+class MyGraphicsView : public QGraphicsView
+{
+    Q_OBJECT
+public:
+    MyGraphicsView(int* curX, QWidget* parent = nullptr) : QGraphicsView(parent)
+    {
+        currentX = curX;
+    }
+
+private:
+    int* currentX;
+    void mouseDoubleClickEvent(QMouseEvent* e)
+    {
+        if(e->button() == Qt::RightButton){
+            ProtocolRates* item = static_cast<ProtocolRates*>(itemAt(e->pos().x(), e->pos().y()));
+            if(item == NULL)
+                return;
+
+            int posX = item->pos().x();
+            int itemW = item->w;
+            QList<QGraphicsItem*> l = scene()->items(posX, e->pos().y(), scene()->width() - posX, e->pos().y() + 1, Qt::IntersectsItemShape, Qt::AscendingOrder);
+            qDebug()<<"shift 2"<<l;
+            QMessageBox* dialog = new QMessageBox(QMessageBox::Warning, "Первое техническое действие!", "Вы уверены?", QMessageBox::Ok | QMessageBox::Cancel);
+            int result = dialog->exec();
+            if(result == QMessageBox::Ok){
+                item = new ProtocolRates("+", "+", false, false);
+                item->setSize(height() / 4.0, height()/3);
+                item->setPos(posX - itemW / 2 + item->w / 2, height()/2);
+                scene()->addItem(item);
+                *currentX += item->w;
+                for(int i = 0; i < l.length(); i++){
+                    l.at(i)->setPos(l.at(i)->pos().x() + item->w, l.at(i)->pos().y());
+                    qDebug()<<"shift 1";
+                }
+
+                shift(item->w, posX);
+            }
+        }
+        if(e->button() == Qt::LeftButton){
+            ProtocolRates* item = static_cast<ProtocolRates*>(scene()->itemAt(e->pos().x(), e->pos().y(), QTransform()));
+            if(item == NULL || item->flagNoStrikethrough == true)
+                return;
+            QMessageBox* dialog = new QMessageBox(QMessageBox::Warning, "Зачеркивание!", "Вы уверены?",
+                                                  QMessageBox::Ok | QMessageBox::Cancel);
+            int result = dialog->exec();
+            if(result == QMessageBox::Ok){
+                item->strikethrough = true;
+                int penWidth = 1;
+                item->update(QRectF(-item->w / 2 - penWidth / 2, -item->h / 2 - penWidth / 2,
+                                     item->w + penWidth, item->h + penWidth));
+                strike(item->pos().x(), item->pos().y());
+            }
+        }
+}
+
+signals:
+    void strike(int, int);
+    void shift(int, int);
+
+};
+
+class ProtocolWindow : public QWidget
 {
     Q_OBJECT
 public:
     ProtocolWindow(QWidget* parent = nullptr);
+    void setMat(QString);
+
+private:
+    void selectFight(QString);
+    void showFight(QString);
+    void showQueue(void);
+    void resetRate(void); 
+    bool calculation(void);
+    void rate_to_png(void);
+    void setAddr(QString);
+
+    virtual void resizeEvent(QResizeEvent*);
+    virtual void paintEvent(QPaintEvent*);
+
+    FightQueue* q;
+    QString address;
+    int mat;
+    int vin;
+    ProtocolRates* lastItem;
+    ProtocolRates* pairedItem;
+
+    LeftRightPushButton* btnNk;
+    LeftRightPushButton* btnV;
+    LeftRightPushButton* btnBP;
+    LeftRightPushButton* btnUd;
+    LeftRightPushButton* btnNkT;
+    LeftRightPushButton* btnYP;
+    LeftRightPushButton* btnPT;
+    LeftRightPushButton* btnOPB;
+    LeftRightPushButton* btnNPB;
+    LeftRightPushButton* btnNkd;
+    LeftRightPushButton* btnTNk;
+    LeftRightPushButton* btnAr;
+    LeftRightPushButton* btnPs;
+    LeftRightPushButton* btnBack;
+    LeftRightPushButton* btn2;
+    LeftRightPushButton* btn1;
+    LeftRightPushButton* btnA;
+    LeftRightPushButton* btn2P;
+    LeftRightPushButton* btn1P;
+    LeftRightPushButton* btnAP;
+    LeftRightPushButton* btnZv;
+    LeftRightPushButton* btnVyh;
+    LeftRightPushButton* btnZp;
+    LeftRightPushButton* btnP1;
+    LeftRightPushButton* btnP2;
+    LeftRightPushButton* btnNy;
+    LeftRightPushButton* btnDoc;
+    LeftRightPushButton* btnVin;
+
+    QLabel* BallsRed;
+    QLabel* BallsBlue;
+    QLabel* AktRed;
+    QLabel* AktBlue;
+    QLabel* ResultRed;
+    QLabel* ResultBlue;
+    QLabel* nameMain;
+    QLabel* nameRef;
+    QLabel* nameSide;
+    QLabel* time;
+    ProtocolNames* itemNameRed;
+    ProtocolNames* itemNameBlue;
+    QGraphicsScene* sceneNameRed;
+    QGraphicsScene* sceneNameBlue;
+    QGraphicsView* sportsmenRed;
+    QGraphicsView* sportsmenBlue;
+    QGraphicsScene* sceneBlue;
+    QGraphicsScene* sceneRed;
+
+    MyGraphicsView* rateRed;
+    MyGraphicsView* rateBlue;
+
+    int num_fight;
+
+    QGridLayout grid;
+
+public slots:
+    void Back(void);
+    void shiftRed(int, int);
+    void shiftBlue(int, int);
+    void strikeRed(int, int);
+    void strikeBlue(int, int);
+    void pastTime(QString);
+
+private slots:
+    void Rate(bool, QString);   
+
+signals:
+    void change_prav(int, QString);
+    void change_vyh(int, QString);
+    void set_plus(int, QString);
+    void change_rate(int, int, int, int);
+    void nameRed(QString);
+    void regRed(QString);
+    void nameBlue(QString);
+    void regBlue(QString);
+    void setWeight(QString);
+
 };
 
 #endif // PROTOCOLWINDOW_H

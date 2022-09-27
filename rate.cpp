@@ -50,12 +50,14 @@ void Rate::sbros() {
     emit sigRate(rate);
 }
 
+/*
 void Rate::mousePressEvent(QMouseEvent *  pe) {
     if (pe->buttons() == Qt::LeftButton)
         plus();
     else if (pe->buttons() == Qt::RightButton)
         minus();
 }
+*/
 
 void Rate::setRate(int r) {
     rate = r;
