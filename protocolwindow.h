@@ -31,17 +31,20 @@ public:
         data = _data;
         address = _address;
         mat = _mat;
+        qDebug()<<address<<mat<<data.length();
     }
 
 public slots:
     void run(void){
+        qDebug()<<"tcp address = "<<address<<mat;
         QTcpSocket* tcp = new QTcpSocket(this);
-        tcp->connectToHost(QHostAddress(address), mat * 2000 + 3);
+        tcp->connectToHost(QHostAddress("192.168.0.102"), mat);
         if (tcp->waitForConnected(100)){
-            qDebug("Connected!");
-            tcp->write(data);
+            qDebug()<<"Connected!";
+            int i = tcp->write("hello");
+            qDebug()<<"Writed = "<<i;
         }
-        tcp->close();
+        tcp-> close();
 
         /*
         sock = socket.socket()
@@ -150,13 +153,11 @@ public:
     void setMat(QString);
 
 private:
-    void selectFight(QString);
-    void showFight(QString);
-    void showQueue(void);
+
     void resetRate(void); 
     bool calculation(void);
     void rate_to_png(void);
-    void setAddr(QString);
+
 
     virtual void resizeEvent(QResizeEvent*);
     virtual void paintEvent(QPaintEvent*);
@@ -230,6 +231,10 @@ public slots:
     void strikeRed(int, int);
     void strikeBlue(int, int);
     void pastTime(QString);
+    void showQueue(void);
+    void selectFight(QString);
+    void showFight(QString);
+    void setAddr(int, QString);
 
 private slots:
     void Rate(bool, QString);   

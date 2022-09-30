@@ -28,7 +28,7 @@ public:
     UdpClient(int _mat, QObject* parent = nullptr);
 
 signals:
-    void conn(int);
+    void conn(int, QString);
 
 };
 

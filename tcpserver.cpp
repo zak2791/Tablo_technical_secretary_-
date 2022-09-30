@@ -31,13 +31,24 @@ void TcpServer::slotNewConnection(void){
 
 void TcpServer::slotReadClient(){
     QTcpSocket* pClientSocket = (QTcpSocket*)sender();
-    QTextStream in(pClientSocket);
-    QString c;
-    while(pClientSocket->bytesAvailable())
-        in >> c;
-    QList<QString> dd = c.split("=");
-    if(dd.length() < 3)
+    //QTextStream in(pClientSocket);
+    //QByteArray c;
+    QByteArray* ba;
+    while(1){
+        int b = pClientSocket->bytesAvailable();
+
+        if(!b) break;
+        ba = new QByteArray(pClientSocket->readAll());
+        qDebug()<<"ba = "<<ba->data();
+        //in >> c;
+    }
+    //qDebug()<<"data = "<<c;
+    //QList<QString> dd = QString(c).split("=");
+    QList<QString> dd = QString(ba->data()).split("=");
+    if(dd.length() < 3){
+        pClientSocket->close();
         return;
+    }
     QString rnd = dd.at(0);
     QString rnd_name = dd.at(1);
     QList<QString> ddd = dd.at(2).split("<");
@@ -46,6 +57,7 @@ void TcpServer::slotReadClient(){
     db.setDatabaseName("baza_in.db");
     if(!db.open()){
         qDebug()<<"error open database";
+        pClientSocket->close();
         return;
     }
     QSqlQuery query;
@@ -53,6 +65,7 @@ void TcpServer::slotReadClient(){
     if(!query.exec(sql)){
         qDebug()<<"error database"<<sql;
         db.close();
+        pClientSocket->close();
         return;
     }else{
         if(!query.next()){
@@ -68,10 +81,14 @@ void TcpServer::slotReadClient(){
                     return;
                 }
             }
-            QTextStream out(pClientSocket);
-            out << rnd;
+            //QTextStream out(pClientSocket);
+            //out << rnd;
+            const char* c = rnd.toUtf8().data();
+            pClientSocket->write(c, rnd.length());
+            qDebug()<<"c = " << c;
         }
     }
+    pClientSocket->close();
     db.close();
 }
 

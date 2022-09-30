@@ -90,7 +90,7 @@ private slots:
 
     void setCat(QString);
 
-    void connUdp(int);
+    void connUdp(int, QString);
 
 private:
     QWidget * formView;

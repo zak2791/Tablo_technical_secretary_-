@@ -355,8 +355,9 @@ void ProtocolWindow::setMat(QString _mat){
     mat = _mat.toInt() * 2000 + 3;
 }
 
-void ProtocolWindow::setAddr(QString addr){
+void ProtocolWindow::setAddr(int, QString addr){
     address = addr;
+    qDebug()<<"setAddress"<<address;
 }
 
 void ProtocolWindow::Rate(bool button, QString name){
@@ -626,7 +627,7 @@ bool ProtocolWindow::calculation(){
             red_p2 = true;
         else if(val.toString() == "П1" && each->strikethrough == false)
             red_p1 = true;
-        else if(val.toString() == "З2" && each->strikethrough == false)
+        else if(val.toString() == "ЗП" && each->strikethrough == false)
             red_zp = true;
         else if(val.toString() == "В" && each->strikethrough == false)
             red_v = true;
@@ -667,7 +668,7 @@ bool ProtocolWindow::calculation(){
             blue_p2 = true;
         else if(val.toString() == "П1" && each->strikethrough == false)
             blue_p1 = true;
-        else if(val.toString() == "З2" && each->strikethrough == false)
+        else if(val.toString() == "ЗП" && each->strikethrough == false)
             blue_zp = true;
         else if(val.toString() == "В" && each->strikethrough == false)
             blue_v = true;
@@ -771,23 +772,39 @@ void ProtocolWindow::rate_to_png(){
     buff.open(QIODevice::WriteOnly);
     int ok = pix.save(&buff, "PNG");
     char* pix_bytes = ba.data();
-    ba.prepend(QByteArray::number(num_fight));
+    //ba.prepend(QByteArray::number(num_fight));
     char* pixmap_bytes = ba.data();
     QSqlDatabase db = QSqlDatabase::addDatabase ("QSQLITE");
     db.setDatabaseName("baza_out.db");
+    if(!db.open()){
+        qDebug()<<"error open data base";
+        return;
+    }
     QSqlQuery query;
     query.prepare("UPDATE rounds SET result = ? WHERE fight = " + QString::number(num_fight));
-    query.bindValue(0, pix_bytes);
+    query.bindValue(0, ba);
     if(!query.exec()){
         qDebug()<<"error database";
     }else{
-        QThread* thread = new QThread;
-        TcpClient* client = new TcpClient(pixmap_bytes, address, mat, nullptr);
+        //QThread* thread = new QThread;
+        ba.prepend(QByteArray::number(num_fight));
+        /*
+        TcpClient* client = new TcpClient(ba, address, mat, nullptr);
         client->moveToThread(thread);
         connect(thread, SIGNAL(started()), client, SLOT(run()));
         thread->start();
         thread->quit();
         thread ->wait();
+        */
+        QTcpSocket* tcp = new QTcpSocket(this);
+        tcp->connectToHost(QHostAddress(address), mat);
+        if (tcp->waitForConnected(100)){
+            qDebug()<<"Connected!";
+            int i = tcp->write(ba);
+            qDebug()<<"Writed = "<<i<<num_fight;
+        }
+        tcp-> close();
+
     }
     db.close();
 }
@@ -818,6 +835,10 @@ void ProtocolWindow::showFight(QString s){
     db.setDatabaseName("baza_out.db");
     QSqlQuery query;
     QString sql = "SELECT result FROM rounds WHERE fight = " + s;
+    if(!db.open()){
+        qDebug()<<"error open database";
+        return;
+    }
     if(!query.exec(sql))
         qDebug()<<"error database";
     else{
@@ -825,10 +846,11 @@ void ProtocolWindow::showFight(QString s){
         if(query.next()){
             QByteArray ba = query.value(0).toByteArray();
             pix.loadFromData(ba, "PNG");
-            ViewFight view(pix, q);
-            view.show();
+            ViewFight*  view = new ViewFight(pix, q);
+            view->show();
         }
     }
+    db.close();
 }
 
 void ProtocolWindow::pastTime(QString t){
@@ -867,32 +889,47 @@ void ProtocolWindow::selectFight(QString s){
         num_fight = obj->objectName().toInt();
         QSqlDatabase db = QSqlDatabase::addDatabase ("QSQLITE");
         db.setDatabaseName("baza_out.db");
-        QSqlQuery query;
+        qDebug()<<"db.isOpen()"<<db.isOpen();
+        if(!db.open()){
+            qDebug()<<"eror open1";
+            return;
+        }
+        qDebug()<<"open db";
+        QSqlQuery query(db);
 
-        QString sql = "INSERT INTO rounds (fight, result) VALUES (?, ?)";
+        qDebug()<<"db.isOpen()"<<db.isOpen();
+
+        QString sql = "INSERT INTO rounds (fight, result) VALUES (:fight, :result);";
 
         query.prepare(sql);
-        query.bindValue(0, obj->objectName());
-        query.bindValue(0, pixmap_bytes);
+
+        query.bindValue(":fight", obj->objectName().toInt());
+        query.bindValue(":result", ba);
+        qDebug()<<"db.isOpen() 3"<<db.isOpen();
         if(!query.exec()){
-            qDebug()<<"error database";
+            qDebug()<<"error database1";
             db.close();
         }else{
             db.close();
             QSqlDatabase db_in = QSqlDatabase::addDatabase ("QSQLITE");
-            db.setDatabaseName("baza_in.db");
-            QSqlQuery query_in;
+            db_in.setDatabaseName("baza_in.db");
+            if(!db_in.open()){
+                qDebug()<<"eror open2";
+                return;
+            }
+            QSqlQuery query_in(db_in);
             if(!query_in.exec("SELECT * FROM referees WHERE id_fight = " + QString::number(num_fight)))
-                qDebug()<<"error database";
+                qDebug()<<"error database2";
             else{
-                if(query.next()){
-                    nameMain->setText(query.value(2).toString());
-                    nameRef->setText(query.value(3).toString());
-                    nameSide->setText(query.value(4).toString());
+                if(query_in.next()){
+                    nameMain->setText(query_in.value(2).toString());
+                    nameRef->setText(query_in.value(3).toString());
+                    nameSide->setText(query_in.value(4).toString());
                 }
             }
-
+            db_in.close();
         }
+
         resetRate();
         setWeight(obj->title.split(",").at(2));
     }

@@ -2,6 +2,7 @@
 #define FIGHTQUEUE_H
 
 #include <QDialog>
+#include "fight.h"
 
 class FightQueue : public QDialog
 {
@@ -12,6 +13,7 @@ public:
 private:
     int currentY;
     virtual void closeEvent(QCloseEvent*);
+    QList<Fight*> f;
 
 private slots:
     void selectFight(QString);

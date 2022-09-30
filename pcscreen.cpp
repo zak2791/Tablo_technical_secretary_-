@@ -206,7 +206,7 @@ PCScreen::PCScreen(QWidget * parent) : QWidget(parent){
 
 
     ProtocolWindow* secr = new ProtocolWindow(this);
-    //connect(btnQueue, SIGNAL("clicked()"), secr->showQueue);
+    connect(btnQueue, SIGNAL(clicked()), secr, SLOT(showQueue()));
 
     //окно индикации наличия связи
     winConnect = new QLabel("нет\nсоединения");
@@ -429,11 +429,11 @@ PCScreen::PCScreen(QWidget * parent) : QWidget(parent){
 
     grid->addWidget(mainTimer,              19, 24, 13, 20);
 
-    grid->addWidget(sec_red,                9,  0,  12, 24);
-    grid->addWidget(sec_blue,               9,  44, 12, 24);
+    grid->addWidget(sec_red,                3,  0,  13, 24);
+    grid->addWidget(sec_blue,               3,  44, 13, 24);
 
-    grid->addWidget(sec_red_t,              9,  0,  12, 24);
-    grid->addWidget(sec_blue_t,             9,  44, 12, 24);
+    grid->addWidget(sec_red_t,              3,  0,  13, 24);
+    grid->addWidget(sec_blue_t,             3,  44, 13, 24);
 
     //grid->addWidget(flag_red,               29, 14, 8,  10);
     //grid->addWidget(flag_blue,              29, 44, 8,  10);
@@ -610,7 +610,8 @@ PCScreen::PCScreen(QWidget * parent) : QWidget(parent){
     UdpClient* udp = new UdpClient(imat);
     //udp->moveToThread(udpThread);
     //connect(udpThread, SIGNAL(started()), udp, SLOT(Process()));
-    connect(udp, SIGNAL(conn(int)), this, SLOT(connUdp(int)));
+    connect(udp, SIGNAL(conn(int, QString)), this, SLOT(connUdp(int, QString)));
+    connect(udp, SIGNAL(conn(int, QString)), secr, SLOT(setAddr(int, QString)));
     //udpThread->start();
 
 
@@ -629,6 +630,12 @@ PCScreen::PCScreen(QWidget * parent) : QWidget(parent){
     connect(secr,       SIGNAL(change_vyh(int, QString)),        this, SLOT(setVyh(int, QString)));
     connect(secr,       SIGNAL(set_plus(int, QString)),          this, SLOT(setPlus(int, QString)));
 
+    connect(secr, SIGNAL(nameRed(QString)),  tvScreen->fam_red,  SLOT(Text(QString)));
+    connect(secr, SIGNAL(nameBlue(QString)), tvScreen->fam_blue, SLOT(Text(QString)));
+    connect(secr, SIGNAL(regRed(QString)),   tvScreen->reg_red,  SLOT(Text(QString)));
+    connect(secr, SIGNAL(regBlue(QString)),  tvScreen->reg_blue, SLOT(Text(QString)));
+
+    connect(secr, SIGNAL(setWeight(QString)), this,              SLOT(setCat(QString)));
 
 }
 
@@ -641,17 +648,23 @@ void PCScreen::setPlus(int rb, QString p){
 }
 
 void PCScreen::setVyh(int rb, QString v){
-    if(rb)
+    if(rb){
         nv_red->setValue(v);
-    else
+        tvScreen->nv_red->setValue(v);
+    }else{
         nv_blue->setValue(v);
+        tvScreen->nv_blue->setValue(v);
+    }
 }
 
 void PCScreen::setPrav(int rb, QString p){
-    if(rb)
+    if(rb){
         np_red->setValue(p);
-    else
+        tvScreen->np_red->setValue(p);
+    }else{
         np_blue->setValue(p);
+        tvScreen->np_blue->setValue(p);
+    }
 }
 
 void PCScreen::setRates(int rb, int bb, int ra, int ba){
@@ -661,7 +674,7 @@ void PCScreen::setRates(int rb, int bb, int ra, int ba){
     actBlue->setRate(ba);
 }
 
-void PCScreen::connUdp(int i){
+void PCScreen::connUdp(int i, QString s){
     if(i != 1){
         winConnect->setStyleSheet("QLabel{border-style: solid; border-color: red; border-width: 2px; border-radius: 5px; background-color: black; color: red; font: bold}");
         winConnect->setText("нет\nсоединения");
@@ -669,6 +682,7 @@ void PCScreen::connUdp(int i){
     else{
         winConnect->setStyleSheet("QLabel{border-style: solid; border-color: lightgreen; border-width: 2px; border-radius: 5px; background-color: black; color: lightgreen; font: bold}");
         winConnect->setText("Соединено\nc ковром " + smat);
+        qDebug()<<"address = "<<s;
     }
 }
 

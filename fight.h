@@ -5,14 +5,17 @@
 #include <QComboBox>
 #include <QByteArray>
 #include <QSplashScreen>
-
+#include <QSqlDatabase>
+#include <QSqlQuery>
 class ViewFight : public QSplashScreen
 {
 public:
     ViewFight(QPixmap _pix, QWidget* parent = nullptr) : QSplashScreen(parent){
-        setGeometry(50, 50, _pix.width(), _pix.height());
-        setPixmap(_pix);
+        //setGeometry(500, 500, _pix->width(), _pix->height());
         pix = _pix;
+        //QPixmap pixmap("1.png");
+        setPixmap(pix);
+
     }
 
 private:
@@ -29,7 +32,7 @@ class Fight : public QLabel
     Q_OBJECT
 
 public:
-    Fight(QString, QString, QString, QString, int, int, QWidget* parent = nullptr);
+    Fight(QString, QString, QString, QString, QString, int, QWidget* parent = nullptr);
     void setPix(QByteArray);
     void setCombo(void);
 
@@ -49,6 +52,9 @@ private:
     QString refRef;
     QComboBox* cmbSaid;
     QString refSaid;
+
+    QSqlDatabase db;
+    QSqlQuery query;
 
     virtual void mousePressEvent(QMouseEvent*);
     virtual void paintEvent(QPaintEvent*);
