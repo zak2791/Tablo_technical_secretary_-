@@ -206,6 +206,7 @@ PCScreen::PCScreen(QWidget * parent) : QWidget(parent){
 
 
     ProtocolWindow* secr = new ProtocolWindow(this);
+    secr->setObjectName("secr");
     connect(btnQueue, SIGNAL(clicked()), secr, SLOT(showQueue()));
 
     //окно индикации наличия связи
@@ -223,19 +224,19 @@ PCScreen::PCScreen(QWidget * parent) : QWidget(parent){
     mainTimer->setObjectName("mainTimer");
     //connect(btnTime, SIGNAL(clicked()), mainTimer, SLOT(StartStop()));
 
-    LCDTimer * sec_red = new LCDTimer(this, "0:20", QColor(255, 0, 0), QColor(255, 102, 102), true, true);
+    LCDStopwatch * sec_red = new LCDStopwatch(this, "0:20", QColor(255, 0, 0), QColor(255, 102, 102), true, true);
     sec_red->setObjectName("sec_red");
     sec_red->hide();
 
-    LCDTimer * sec_blue = new LCDTimer(this, "0:20", QColor(0, 0, 255), QColor(102, 102, 255), true, true);
+    LCDStopwatch * sec_blue = new LCDStopwatch(this, "0:20", QColor(0, 0, 255), QColor(102, 102, 255), true, true);
     sec_blue->setObjectName("sec_blue");
     sec_blue->hide();
 
-    LCDTimer * sec_red_t = new LCDStopwatch(this, "2:00", QColor(255, 0, 0), QColor(255, 102, 102), true, true);
+    LCDStopwatch * sec_red_t = new LCDStopwatch(this, "2:00", QColor(255, 0, 0), QColor(255, 102, 102), true, true);
     sec_red_t->setObjectName("sec_red_t");
     sec_red_t->hide();
 
-    LCDTimer * sec_blue_t = new LCDStopwatch(this, "2:00", QColor(0, 0, 255), QColor(102, 102, 255), true, true);
+    LCDStopwatch * sec_blue_t = new LCDStopwatch(this, "2:00", QColor(0, 0, 255), QColor(102, 102, 255), true, true);
     sec_blue_t->setObjectName("sec_blue_t");
     sec_blue_t->hide();
 
@@ -257,7 +258,7 @@ PCScreen::PCScreen(QWidget * parent) : QWidget(parent){
     cat = new QPushButton(this);//("yellow", this);
     cat->setAutoFillBackground(true);
     cat->setStyleSheet("background-color: black; color: white; text-align: center");
-
+    cat->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
 
 
 
@@ -675,11 +676,11 @@ void PCScreen::setRates(int rb, int bb, int ra, int ba){
 }
 
 void PCScreen::connUdp(int i, QString s){
-    if(i != 1){
+    if(i == 2){
         winConnect->setStyleSheet("QLabel{border-style: solid; border-color: red; border-width: 2px; border-radius: 5px; background-color: black; color: red; font: bold}");
         winConnect->setText("нет\nсоединения");
     }
-    else{
+    else if(i == 1){
         winConnect->setStyleSheet("QLabel{border-style: solid; border-color: lightgreen; border-width: 2px; border-radius: 5px; background-color: black; color: lightgreen; font: bold}");
         winConnect->setText("Соединено\nc ковром " + smat);
         qDebug()<<"address = "<<s;

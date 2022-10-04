@@ -54,6 +54,7 @@ void UdpClient::readPendingDatagrams(){
     }while(udp_socket->hasPendingDatagrams());
     if(state){
         state = 0;
+        qDebug()<<"dtg.senderPort()"<<dtg.senderPort();
         conn(1, dtg.senderAddress().toString());
     }
 }

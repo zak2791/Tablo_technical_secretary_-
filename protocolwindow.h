@@ -154,7 +154,7 @@ public:
 
 private:
 
-    void resetRate(void); 
+
     bool calculation(void);
     void rate_to_png(void);
 
@@ -182,18 +182,18 @@ private:
     LeftRightPushButton* btnTNk;
     LeftRightPushButton* btnAr;
     LeftRightPushButton* btnPs;
-    LeftRightPushButton* btnBack;
-    LeftRightPushButton* btn2;
-    LeftRightPushButton* btn1;
-    LeftRightPushButton* btnA;
-    LeftRightPushButton* btn2P;
-    LeftRightPushButton* btn1P;
-    LeftRightPushButton* btnAP;
-    LeftRightPushButton* btnZv;
-    LeftRightPushButton* btnVyh;
-    LeftRightPushButton* btnZp;
-    LeftRightPushButton* btnP1;
-    LeftRightPushButton* btnP2;
+    QPushButton* btnBack;
+    //LeftRightPushButton* btn2;
+    //LeftRightPushButton* btn1;
+    //LeftRightPushButton* btnA;
+    //LeftRightPushButton* btn2P;
+    //LeftRightPushButton* btn1P;
+    //LeftRightPushButton* btnAP;
+    //LeftRightPushButton* btnZv;
+    //LeftRightPushButton* btnVyh;
+    //LeftRightPushButton* btnZp;
+    //LeftRightPushButton* btnP1;
+    //LeftRightPushButton* btnP2;
     LeftRightPushButton* btnNy;
     LeftRightPushButton* btnDoc;
     LeftRightPushButton* btnVin;
@@ -224,6 +224,29 @@ private:
 
     QGridLayout grid;
 
+    LeftRightPushButton* btn2_red;
+    LeftRightPushButton* btn2_blue;
+    LeftRightPushButton* btn1_red;
+    LeftRightPushButton* btn1_blue;
+    LeftRightPushButton* btnA_red;
+    LeftRightPushButton* btnA_blue;
+    LeftRightPushButton* btn2P_red;
+    LeftRightPushButton* btn2P_blue;
+    LeftRightPushButton* btn1P_red;
+    LeftRightPushButton* btn1P_blue;
+    LeftRightPushButton* btnAP_red;
+    LeftRightPushButton* btnAP_blue;
+    LeftRightPushButton* btnZv_red;
+    LeftRightPushButton* btnZv_blue;
+    LeftRightPushButton* btnVyh_red;
+    LeftRightPushButton* btnVyh_blue;
+    LeftRightPushButton* btnZp_red;
+    LeftRightPushButton* btnZp_blue;
+    LeftRightPushButton* btnP1_red;
+    LeftRightPushButton* btnP1_blue;
+    LeftRightPushButton* btnP2_red;
+    LeftRightPushButton* btnP2_blue;
+
 public slots:
     void Back(void);
     void shiftRed(int, int);
@@ -235,6 +258,7 @@ public slots:
     void selectFight(QString);
     void showFight(QString);
     void setAddr(int, QString);
+    void resetRate(void);
 
 private slots:
     void Rate(bool, QString);   
