@@ -1040,10 +1040,10 @@ void ProtocolWindow::rate_to_png(){
     QByteArray ba;
     QBuffer buff(&ba);
     buff.open(QIODevice::WriteOnly);
-    int ok = pix.save(&buff, "PNG");
-    char* pix_bytes = ba.data();
+    pix.save(&buff, "PNG");
+    //char* pix_bytes = ba.data();
     //ba.prepend(QByteArray::number(num_fight));
-    char* pixmap_bytes = ba.data();
+    //char* pixmap_bytes = ba.data();
     QSqlDatabase db = QSqlDatabase::addDatabase ("QSQLITE");
     db.setDatabaseName("baza_out.db");
     if(!db.open()){
@@ -1057,7 +1057,8 @@ void ProtocolWindow::rate_to_png(){
         qDebug()<<"error database";
     }else{
         //QThread* thread = new QThread;
-        ba.prepend(QByteArray::number(num_fight));
+        //ba.prepend(QByteArray::number(num_fight));
+        ba.prepend(num_fight);
         /*
         TcpClient* client = new TcpClient(ba, address, mat, nullptr);
         client->moveToThread(thread);
@@ -1072,8 +1073,14 @@ void ProtocolWindow::rate_to_png(){
             qDebug()<<"Connected!";
             int i = tcp->write(ba);
             qDebug()<<"Writed = "<<i<<num_fight;
+            if(tcp->waitForReadyRead(2000)){
+                qDebug()<<tcp->readAll();
+            }else{
+                qDebug()<<"not data";
+            }
         }
         tcp-> close();
+        delete tcp;
 
     }
     db.close();
@@ -1093,7 +1100,7 @@ void ProtocolWindow::resetRate(){
 }
 
 void ProtocolWindow::showQueue(){
-    q = new FightQueue;
+    q = new FightQueue(address, mat);
     connect(q, SIGNAL(select_fight(QString)), this, SLOT(selectFight(QString)));
     connect(q, SIGNAL(show_fight(QString)), this, SLOT(showFight(QString)));
     q->exec();
@@ -1153,8 +1160,8 @@ void ProtocolWindow::selectFight(QString s){
         QByteArray ba;
         QBuffer buff(&ba);
         buff.open(QIODevice::WriteOnly);
-        int ok = pix.save(&buff, "PNG");
-        char* pixmap_bytes = ba.data();
+        pix.save(&buff, "PNG");
+        //char* pixmap_bytes = ba.data();
 
         num_fight = obj->objectName().toInt();
         QSqlDatabase db = QSqlDatabase::addDatabase ("QSQLITE");

@@ -8,12 +8,14 @@ class FightQueue : public QDialog
 {
     Q_OBJECT
 public:
-    FightQueue(QWidget *parent = 0);
+    FightQueue(QString, int, QWidget *parent = 0);
 
 private:
     int currentY;
     virtual void closeEvent(QCloseEvent*);
     QList<Fight*> f;
+    QString address;
+    int mat;
 
 private slots:
     void selectFight(QString);

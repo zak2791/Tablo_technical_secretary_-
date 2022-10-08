@@ -5,8 +5,10 @@
 #include <QSqlQuery>
 #include <fight.h>
 
-FightQueue::FightQueue(QWidget *parent) : QDialog(parent)
+FightQueue::FightQueue(QString addr, int _mat, QWidget *parent) : QDialog(parent)
 {
+    address = addr;
+    mat = _mat;
     setGeometry(10, 50, 600, 600);
     QScrollArea* scroll = new QScrollArea(this);
     scroll->setGeometry(10, 10, 580, 580);
@@ -32,7 +34,7 @@ FightQueue::FightQueue(QWidget *parent) : QDialog(parent)
             QList<QString>  v4;
             QList<QString>  v5;
             QList<QString>  v6;
-            QList<QString>      v2;
+            QList<QString>  v2;
             QList<int>      v7;
             while(query_in.next()){
                 v3.append(query_in.value(3).toString());
@@ -55,6 +57,7 @@ FightQueue::FightQueue(QWidget *parent) : QDialog(parent)
             QString sql_out = "SELECT * FROM rounds WHERE fight = ";
 
             QList<QByteArray> lba;
+            QList<int> l_sent;  //флаг отсылки данных главному секретарю
             for(int i = 0; i < v3.length(); i++){
                 QString sql = "SELECT * FROM rounds WHERE fight = " + QString::number(v7.at(i));
                 if(!query_out.exec(sql)){
@@ -62,8 +65,10 @@ FightQueue::FightQueue(QWidget *parent) : QDialog(parent)
                 }else{
                     if(query_out.next()){
                         lba.append(query_out.value(2).toByteArray());
+                        l_sent.append(query_out.value(3).toInt());
                     }else{
                         lba.append(NULL);
+                        l_sent.append(-1);
                     }
                 }
             }
@@ -82,13 +87,27 @@ FightQueue::FightQueue(QWidget *parent) : QDialog(parent)
             db_out.close();
 
             for(int i = 0; i < lba.length(); i++){
-                f.append(new Fight(v3.at(i), v4.at(i), v5.at(i), v6.at(i), v2.at(i), v7.at(i), fight_window));
+                f.append(new Fight(v3.at(i),
+                                   v4.at(i),
+                                   v5.at(i),
+                                   v6.at(i),
+                                   v2.at(i),
+                                   v7.at(i),
+                                   address,
+                                   mat,
+                                   fight_window));
                 f.last()->move(0, currentY);
                 f.last()->setObjectName(QString::number(v7.at(i)));
                 if(lba.at(i) == "")
                     f.last()->setCombo();
                 else
                     f.last()->setPix(lba.at(i));
+
+                if(l_sent.at(i) > 0 || l_sent.at(i) == -1){
+                    f.last()->btnOk->setEnabled(false);
+                    if(l_sent.at(i) > 0)
+                        f.last()->btnOk->setStyleSheet("background-color: green; color: white;");
+                }
 
                 connect(f.last(), SIGNAL(select_fight(QString)), this, SLOT(selectFight(QString)));
                 connect(f.last(), SIGNAL(show_fight(QString)), this, SLOT(showFight(QString)));

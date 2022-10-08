@@ -137,7 +137,8 @@ PCScreen::PCScreen(QWidget * parent) : QWidget(parent){
         QString sql = "CREATE TABLE rounds ( "
               "id INTEGER PRIMARY KEY AUTOINCREMENT, "
               "fight INTEGER, "
-              "result BLOB)";
+              "result BLOB,"
+              "sent INTEGER DEFAULT 0)";
         if(!query.exec(sql)){
             qDebug()<<"error database4"<<query.lastError();;
             db.close();

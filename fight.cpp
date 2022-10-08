@@ -6,6 +6,8 @@
 #include <QDebug>
 #include <QSqlError>
 #include <QPainter>
+#include <QTcpSocket>
+#include "protocolwindow.h"
 
 Fight::Fight(QString r,
              QString b,
@@ -13,8 +15,12 @@ Fight::Fight(QString r,
              QString nb,
              QString t,
              int nf,
+             QString addr,
+             int _mat,
              QWidget* parent) : QLabel(parent)
 {
+    address = addr;
+    mat = _mat;
     QList<QString> _red = r.split(":");
     if(_red.length() == 2)
         red = _red.at(1) + " (" + _red.at(0) + ")";
@@ -40,6 +46,10 @@ Fight::Fight(QString r,
     lblFight->setGeometry(0, 20, 560, 80);
     lblFight->setVisible(false);
 
+    btnOk = new QPushButton(QString::number(num_fight), this);
+    btnOk->setGeometry(0, 0, 40, 20);
+    connect(btnOk, SIGNAL(clicked()), this, SLOT(sendPix()));
+
     //судьи
     cmbMain = nullptr;
     refMain = "";
@@ -62,6 +72,44 @@ Fight::Fight(QString r,
         referees.close();
     }
     show();
+}
+
+void Fight::sendPix(){
+    qDebug()<<num_fight;
+    QSqlDatabase db = QSqlDatabase::addDatabase ("QSQLITE");
+    db.setDatabaseName("baza_out.db");
+    if (!db.open()){
+        qDebug()<<"Cannot open database:"<< db.lastError();
+    }else{
+        QSqlQuery query;
+        if(!query.exec("SELECT result FROM rounds WHERE fight = " + QString::number(num_fight))){
+            qDebug()<<"error database"<< db.lastError();
+        }else{
+            if(query.next()){
+                qDebug()<<"address = "<<address<<"mat = "<<mat;
+                QByteArray ba = query.value(0).toByteArray();
+                ba.prepend(num_fight);
+                QTcpSocket* tcp = new QTcpSocket(this);
+                tcp->connectToHost(QHostAddress(address), mat);
+                if (tcp->waitForConnected(100)){
+                    qDebug()<<"Connected!";
+                    int i = tcp->write(ba);
+                    qDebug()<<"Writed = "<<i<<num_fight;
+                    if(tcp->waitForReadyRead(2000)){
+                        if(tcp->readAll() == "ok"){
+                            btnOk->setEnabled(false);
+                            btnOk->setStyleSheet("background-color: green; color: white;");
+                        }
+                    }else{
+                        qDebug()<<"not data";
+                    }
+                }
+                tcp-> close();
+                delete tcp;
+            }
+        }
+        db.close();
+    }
 }
 
 void Fight::setCombo(){
@@ -106,17 +154,8 @@ void Fight::setCombo(){
             cmbSaid->addItems(ref);
             cmbSaid->setObjectName("said");
             connect(cmbSaid, SIGNAL(activated(int)), this, SLOT(selectRef(int)));
-            //int sz = query.size();
-            //if(sz < 1){
-            //    db.close();
-            //    return;
-            //}
+
             if(query.next()){
-                //id.append(query.value(0).toInt());
-                //id_fight.append(query.value(1).toInt());
-                //ref1.append(query.value(2).toString());
-                //ref2.append(query.value(3).toString());
-                //ref3.append(query.value(4).toString());
 
                 refMain = query.value(2).toString();//ref1.at(0);
                 int index = cmbMain->findText(refMain);

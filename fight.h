@@ -7,6 +7,8 @@
 #include <QSplashScreen>
 #include <QSqlDatabase>
 #include <QSqlQuery>
+#include <QPushButton>
+
 class ViewFight : public QSplashScreen
 {
 public:
@@ -32,7 +34,7 @@ class Fight : public QLabel
     Q_OBJECT
 
 public:
-    Fight(QString, QString, QString, QString, QString, int, QWidget* parent = nullptr);
+    Fight(QString, QString, QString, QString, QString, int, QString, int, QWidget* parent = nullptr);
     void setPix(QByteArray);
     void setCombo(void);
 
@@ -40,6 +42,8 @@ public:
     QString blue;
     QLabel* lblFight;
     QString title;
+
+    QPushButton* btnOk;
 
 private:
     QString note_red;
@@ -56,11 +60,15 @@ private:
     QSqlDatabase db;
     QSqlQuery query;
 
+    QString address;
+    int mat;
+
     virtual void mousePressEvent(QMouseEvent*);
     virtual void paintEvent(QPaintEvent*);
 
 private slots:
     void selectRef(int);
+    void sendPix(void);
 
 signals:
     void show_fight(QString);
