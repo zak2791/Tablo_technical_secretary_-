@@ -147,19 +147,19 @@ PCScreen::PCScreen(QWidget * parent) : QWidget(parent){
         db.close();
     }
 
-    QPushButton * btnParter_red = new QPushButton(u8"ПАРТЕР", this);
+    btnParter_red = new QPushButton(u8"ПАРТЕР", this);
     btnParter_red->setObjectName("btnParter_red");
     btnParter_red->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
     btnParter_red->setStyleSheet("color: red; font: bold " + QString::number(round(btnParter_red->height() / 2)) + "px;");
     //btnParter_red->setFocusPolicy(Qt::NoFocus);
 
-    QPushButton * btnTime = new QPushButton(u8"ВРЕМЯ", this);
+    btnTime = new QPushButton(u8"ВРЕМЯ", this);
     btnTime->setObjectName("btnTime");
     btnTime->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
     //btnTime->setStyleSheet("color: green; font: bold " + QString::number(round(btnTime->height() / 2)) + "px;");
     //btnTime->setFocusPolicy(Qt::NoFocus);
 
-    QPushButton * btnParter_blue = new QPushButton(u8"ПАРТЕР", this);
+    btnParter_blue = new QPushButton(u8"ПАРТЕР", this);
     btnParter_blue->setObjectName("btnParter_blue");
     btnParter_blue->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
     btnParter_blue->setStyleSheet("color: blue; font: bold " + QString::number(round(btnParter_blue->height() / 2)) + "px;");
@@ -639,6 +639,20 @@ PCScreen::PCScreen(QWidget * parent) : QWidget(parent){
 
     connect(secr, SIGNAL(setWeight(QString)), this,              SLOT(setCat(QString)));
 
+    time = new PultTime;
+    time->setObjectName("time");
+    QThread* threadPult = new QThread;
+    time->moveToThread(threadPult);
+    connect(threadPult, SIGNAL(started()), time, SLOT(Process()));
+    threadPult->start();
+    connect(time, SIGNAL(sigGreen()), btnTime,        SLOT(click()));
+    connect(time, SIGNAL(sigRed()),   btnParter_red,  SLOT(click()));
+    connect(time, SIGNAL(sigBlue()),  btnParter_blue, SLOT(click()));
+
+    connect(mainTimer, SIGNAL(sigStarted(bool)), time, SLOT(stateGreen(bool)), Qt::DirectConnection);
+    connect(sec_red,   SIGNAL(sigStarted(bool)), time, SLOT(stateRed(bool)),   Qt::DirectConnection);
+    connect(sec_blue,  SIGNAL(sigStarted(bool)), time, SLOT(stateBlue(bool)),  Qt::DirectConnection);
+
 }
 
 void PCScreen::setPlus(int rb, QString p){
@@ -1044,6 +1058,12 @@ void PCScreen::paintEvent(QPaintEvent * ) {
 void PCScreen::keyPressEvent(QKeyEvent * pe){
     if(pe->key() == Qt::Key_F1)
         frmTime->show();
+    else if(pe->key() == Qt::Key_Z)
+        btnParter_red->click();
+    else if(pe->key() == Qt::Key_X)
+        btnTime->click();
+    else if(pe->key() == Qt::Key_C)
+        btnParter_blue->click();
     else
         sendKey(pe->key());
 }

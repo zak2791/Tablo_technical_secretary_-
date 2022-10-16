@@ -20,6 +20,7 @@
 #include <QPointer>
 #include <QCheckBox>
 #include "cameraconnection.h"
+#include "pulttime.h"
 
 class WidgetFilter : public QObject {
     Q_OBJECT
@@ -169,6 +170,12 @@ private:
     QPointer<CameraConnection> camConn;
 
     QString smat;
+
+    PultTime* time;
+
+    QPushButton * btnParter_red;
+    QPushButton * btnTime;
+    QPushButton * btnParter_blue;
 
 };
 

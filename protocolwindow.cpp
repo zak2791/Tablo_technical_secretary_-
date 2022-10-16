@@ -470,8 +470,11 @@ ProtocolWindow::ProtocolWindow(QWidget* p) : QWidget(p)
     //self.margin = 6
 
     //QGridLayout grid(this);
+    spacing = 6;
+    margin = 6;
+
     grid.setSpacing(6);
-    grid.setMargin(6);
+    grid.setMargin(2);
 
     grid.addWidget(btnNk,         0,  0, 3, 3);
     grid.addWidget(btnV,          0,  3, 3, 3);
@@ -1034,8 +1037,10 @@ bool ProtocolWindow::calculation(){
 void ProtocolWindow::rate_to_png(){
     if(num_fight == NULL)
         return;
-    QPixmap pix(sportsmenRed->width() + rateRed->width() + BallsRed->width() + ResultRed->width() + time->width(), rateRed->height() * 2);
-    render(&pix, QPoint(-sportsmenRed->pos().x(), -sportsmenRed->pos().y()));
+    //QPixmap pix(sportsmenRed->width() + rateRed->width() + BallsRed->width() + ResultRed->width() + time->width(), rateRed->height() * 2);
+    QPixmap pix(sportsmenRed->width() + rateRed->width() + BallsRed->width() + ResultRed->width() + time->width() + margin * 2 + spacing * 4,
+                rateRed->height() * 2 + margin * 2 + spacing);
+    render(&pix, QPoint(-sportsmenRed->pos().x() + margin, -sportsmenRed->pos().y() + margin));
 
     QByteArray ba;
     QBuffer buff(&ba);

@@ -97,8 +97,12 @@ void Fight::sendPix(){
                     qDebug()<<"Writed = "<<i<<num_fight;
                     if(tcp->waitForReadyRead(2000)){
                         if(tcp->readAll() == "ok"){
-                            btnOk->setEnabled(false);
-                            btnOk->setStyleSheet("background-color: green; color: white;");
+                            if(!query.exec("UPDATE rounds SET sent = 1 WHERE fight = " + QString::number(num_fight))){
+                                qDebug()<<"error database"<< db.lastError();
+                            }else{
+                                btnOk->setEnabled(false);
+                                btnOk->setStyleSheet("background-color: green; color: white;");
+                            }
                         }
                     }else{
                         qDebug()<<"not data";

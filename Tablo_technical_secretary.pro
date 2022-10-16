@@ -36,6 +36,7 @@ SOURCES += \
     protocolnames.cpp \
     protocolrates.cpp \
     protocolwindow.cpp \
+    pulttime.cpp \
     rate.cpp \
     tcpserver.cpp \
     tvscreen.cpp \
@@ -50,6 +51,7 @@ HEADERS += \
     fam_reg.h \
     fight.h \
     fightqueue.h \
+    ftd2xx.h \
     lcdstopwatch.h \
     lcdtimer.h \
     narusheniya_pravil.h \
@@ -61,6 +63,7 @@ HEADERS += \
     protocolnames.h \
     protocolrates.h \
     protocolwindow.h \
+    pulttime.h \
     rate.h \
     tcpserver.h \
     tvscreen.h \
@@ -94,3 +97,11 @@ win32: LIBS += -L$$PWD/ffmpeg/lib/ -lswresample
 
 RESOURCES += \
     res.qrc
+
+
+
+
+win32: LIBS += -L$$PWD/./ -lftd2xx
+
+INCLUDEPATH += $$PWD/.
+DEPENDPATH += $$PWD/.

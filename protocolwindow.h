@@ -158,6 +158,9 @@ private:
     bool calculation(void);
     void rate_to_png(void);
 
+    int spacing;
+    int margin;
+
 
     virtual void resizeEvent(QResizeEvent*);
     virtual void paintEvent(QPaintEvent*);
