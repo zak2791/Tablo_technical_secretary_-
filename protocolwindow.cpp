@@ -108,14 +108,6 @@ ProtocolWindow::ProtocolWindow(QWidget* p) : QWidget(p)
     btnBack->setFocusPolicy(Qt::NoFocus);
     connect(btnBack, SIGNAL(clicked()), this, SLOT(Back()));
 
-    /*
-    btn2 = new LeftRightPushButton("2", this);
-    btn2->setObjectName("TWO");
-    btn2->setMinimumSize(40, 40);
-    btn2->setFocusPolicy(Qt::NoFocus);
-    connect(btn2, SIGNAL(left_right_clicked(bool, QString)), this, SLOT(Rate(bool, QString)));
-    */
-
     btn2_red = new LeftRightPushButton("2", this);
     btn2_red->setObjectName("btn2_red");
     btn2_red->setMinimumSize(30, 30);
@@ -129,14 +121,6 @@ ProtocolWindow::ProtocolWindow(QWidget* p) : QWidget(p)
     btn2_blue->setFocusPolicy(Qt::NoFocus);
     btn2_blue->setStyleSheet("background-color: blue; color: white");
     connect(btn2_blue, SIGNAL(left_right_clicked(bool, QString)), this, SLOT(Rate(bool, QString)));
-
-    /*
-    btn1 = new LeftRightPushButton("1", this);
-    btn1->setObjectName("btn1");
-    btn1->setMinimumSize(40, 40);
-    btn1->setFocusPolicy(Qt::NoFocus);
-    connect(btn1, SIGNAL(left_right_clicked(bool, QString)), this, SLOT(Rate(bool, QString)));
-    */
 
     btn1_red = new LeftRightPushButton("1", this);
     btn1_red->setObjectName("btn1_red");
@@ -152,14 +136,6 @@ ProtocolWindow::ProtocolWindow(QWidget* p) : QWidget(p)
     btn1_blue->setStyleSheet("background-color: blue; color: white");
     connect(btn1_blue, SIGNAL(left_right_clicked(bool, QString)), this, SLOT(Rate(bool, QString)));
 
-    /*
-    btnA = new LeftRightPushButton("A", this);
-    btnA->setObjectName("A");
-    btnA->setMinimumSize(40, 40);
-    btnA->setFocusPolicy(Qt::NoFocus);
-    connect(btnA, SIGNAL(left_right_clicked(bool, QString)), this, SLOT(Rate(bool, QString)));
-    */
-
     btnA_red = new LeftRightPushButton("A", this);
     btnA_red->setObjectName("btnA_red");
     btnA_red->setMinimumSize(30, 30);
@@ -173,15 +149,6 @@ ProtocolWindow::ProtocolWindow(QWidget* p) : QWidget(p)
     btnA_blue->setFocusPolicy(Qt::NoFocus);
     btnA_blue->setStyleSheet("background-color: blue; color: white");
     connect(btnA_blue, SIGNAL(left_right_clicked(bool, QString)), this, SLOT(Rate(bool, QString)));
-
-    /*
-    btn2P = new LeftRightPushButton("", this);
-    btn2P->setObjectName("2P");
-    btn2P->setIcon(QIcon("A2.png"));
-    btn2P->setMinimumSize(40, 40);
-    btn2P->setFocusPolicy(Qt::NoFocus);
-    connect(btn2P, SIGNAL(left_right_clicked(bool, QString)), this, SLOT(Rate(bool, QString)));
-    */
 
     btn2P_red = new LeftRightPushButton("", this);
     btn2P_red->setObjectName("btn2P_red");
@@ -199,15 +166,6 @@ ProtocolWindow::ProtocolWindow(QWidget* p) : QWidget(p)
     btn2P_blue->setStyleSheet("background-color: blue; color: white");
     connect(btn2P_blue, SIGNAL(left_right_clicked(bool, QString)), this, SLOT(Rate(bool, QString)));
 
-    /*
-    btn1P = new LeftRightPushButton("", this);
-    btn1P->setObjectName("1P");
-    btn1P->setIcon(QIcon("A1.png"));
-    btn1P->setMinimumSize(40, 40);
-    btn1P->setFocusPolicy(Qt::NoFocus);
-    connect(btn1P, SIGNAL(left_right_clicked(bool, QString)), this, SLOT(Rate(bool, QString)));
-    */
-
     btn1P_red = new LeftRightPushButton("", this);
     btn1P_red->setObjectName("btn1P_red");
     btn1P_red->setIcon(QIcon("A1.png"));
@@ -223,15 +181,6 @@ ProtocolWindow::ProtocolWindow(QWidget* p) : QWidget(p)
     btn1P_blue->setFocusPolicy(Qt::NoFocus);
     btn1P_blue->setStyleSheet("background-color: blue; color: white");
     connect(btn1P_blue, SIGNAL(left_right_clicked(bool, QString)), this, SLOT(Rate(bool, QString)));
-
-    /*
-    btnAP = new LeftRightPushButton("", this);
-    btnAP->setObjectName("AP");
-    btnAP->setIcon(QIcon("AA.png"));
-    btnAP->setMinimumSize(40, 40);
-    btnAP->setFocusPolicy(Qt::NoFocus);
-    connect(btnAP, SIGNAL(left_right_clicked(bool, QString)), this, SLOT(Rate(bool, QString)));
-    */
 
     btnAP_red = new LeftRightPushButton("", this);
     btnAP_red->setObjectName("btnAP_red");
@@ -249,14 +198,6 @@ ProtocolWindow::ProtocolWindow(QWidget* p) : QWidget(p)
     btnAP_blue->setStyleSheet("background-color: blue; color: white");
     connect(btnAP_blue, SIGNAL(left_right_clicked(bool, QString)), this, SLOT(Rate(bool, QString)));
 
-    /*
-    btnZv = new LeftRightPushButton("Зв", this);
-    btnZv->setObjectName("ZV");
-    btnZv->setMinimumSize(40, 40);
-    btnZv->setFocusPolicy(Qt::NoFocus);
-    connect(btnZv, SIGNAL(left_right_clicked(bool, QString)), this, SLOT(Rate(bool, QString)));
-    */
-
     btnZv_red = new LeftRightPushButton("Зв", this);
     btnZv_red->setObjectName("btnZv_red");
     btnZv_red->setMinimumSize(30, 30);
@@ -270,14 +211,6 @@ ProtocolWindow::ProtocolWindow(QWidget* p) : QWidget(p)
     btnZv_blue->setFocusPolicy(Qt::NoFocus);
     btnZv_blue->setStyleSheet("background-color: blue; color: white");
     connect(btnZv_blue, SIGNAL(left_right_clicked(bool, QString)), this, SLOT(Rate(bool, QString)));
-
-    /*
-    btnVyh = new LeftRightPushButton("В", this);
-    btnVyh->setObjectName("VYH");
-    btnVyh->setMinimumSize(40, 40);
-    btnVyh->setFocusPolicy(Qt::NoFocus);
-    connect(btnVyh, SIGNAL(left_right_clicked(bool, QString)), this, SLOT(Rate(bool, QString)));
-    */
 
     btnVyh_red = new LeftRightPushButton("В", this);
     btnVyh_red->setObjectName("btnVyh_red");
@@ -293,14 +226,6 @@ ProtocolWindow::ProtocolWindow(QWidget* p) : QWidget(p)
     btnVyh_blue->setStyleSheet("background-color: blue; color: white");
     connect(btnVyh_blue, SIGNAL(left_right_clicked(bool, QString)), this, SLOT(Rate(bool, QString)));
 
-    /*
-    btnZp = new LeftRightPushButton("Зп", this);
-    btnZp->setObjectName("ZP");
-    btnZp->setMinimumSize(40, 40);
-    btnZp->setFocusPolicy(Qt::NoFocus);
-    connect(btnZp, SIGNAL(left_right_clicked(bool, QString)), this, SLOT(Rate(bool, QString)));
-    */
-
     btnZp_red = new LeftRightPushButton("Зп", this);
     btnZp_red->setObjectName("btnZp_red");
     btnZp_red->setMinimumSize(30, 30);
@@ -315,14 +240,6 @@ ProtocolWindow::ProtocolWindow(QWidget* p) : QWidget(p)
     btnZp_blue->setStyleSheet("background-color: blue; color: white");
     connect(btnZp_blue, SIGNAL(left_right_clicked(bool, QString)), this, SLOT(Rate(bool, QString)));
 
-    /*
-    btnP1 = new LeftRightPushButton("П1", this);
-    btnP1->setObjectName("P1");
-    btnP1->setMinimumSize(40, 40);
-    btnP1->setFocusPolicy(Qt::NoFocus);
-    connect(btnP1, SIGNAL(left_right_clicked(bool, QString)), this, SLOT(Rate(bool, QString)));
-    */
-
     btnP1_red = new LeftRightPushButton("П1", this);
     btnP1_red->setObjectName("btnP1_red");
     btnP1_red->setMinimumSize(30, 30);
@@ -336,14 +253,6 @@ ProtocolWindow::ProtocolWindow(QWidget* p) : QWidget(p)
     btnP1_blue->setFocusPolicy(Qt::NoFocus);
     btnP1_blue->setStyleSheet("background-color: blue; color: white");
     connect(btnP1_blue, SIGNAL(left_right_clicked(bool, QString)), this, SLOT(Rate(bool, QString)));
-
-    /*
-    btnP2 = new LeftRightPushButton("П2", this);
-    btnP2->setObjectName("P2");
-    btnP2->setMinimumSize(40, 40);
-    btnP2->setFocusPolicy(Qt::NoFocus);
-    connect(btnP2, SIGNAL(left_right_clicked(bool, QString)), this, SLOT(Rate(bool, QString)));
-    */
 
     btnP2_red = new LeftRightPushButton("П2", this);
     btnP2_red->setObjectName("btnP2_red");
@@ -530,21 +439,21 @@ ProtocolWindow::ProtocolWindow(QWidget* p) : QWidget(p)
     grid.addWidget(btnBack,       0, 68, 6, 4);
     grid.addWidget(sportsmenRed,  6, 0, 4, 10);
     grid.addWidget(sportsmenBlue, 10, 0, 4, 10);
-    grid.addWidget(rateRed,       6, 10, 4, 45);
-    grid.addWidget(rateBlue,      10, 10, 4, 45);
-    grid.addWidget(BallsRed,      6,  55, 2, 5);
-    grid.addWidget(AktRed,        8,  55, 2, 5);
-    grid.addWidget(BallsBlue,     10, 55, 2, 5);
-    grid.addWidget(AktBlue,       12, 55, 2, 5);
-    grid.addWidget(ResultRed,     6,  60, 4, 5);
-    grid.addWidget(ResultBlue,    10, 60, 4, 5);
+    grid.addWidget(rateRed,       6, 10, 4, 53);
+    grid.addWidget(rateBlue,      10, 10, 4, 53);
+    grid.addWidget(BallsRed,      6,  63, 2, 2);
+    grid.addWidget(AktRed,        8,  63, 2, 2);
+    grid.addWidget(BallsBlue,     10, 63, 2, 2);
+    grid.addWidget(AktBlue,       12, 63, 2, 2);
+    grid.addWidget(ResultRed,     6,  65, 4, 2);
+    grid.addWidget(ResultBlue,    10, 65, 4, 2);
 
-    grid.addWidget(&lblRef,        6, 65, 1, 7);
-    grid.addWidget(nameMain,       7, 65, 1, 7);
-    grid.addWidget(nameRef,        8, 65, 1, 7);
-    grid.addWidget(nameSide,       9, 65, 1, 7);
-    grid.addWidget(&lblTime,       10, 65, 1, 7);
-    grid.addWidget(time,           11, 65, 3, 7);
+    grid.addWidget(&lblRef,        6, 67, 1, 5);
+    grid.addWidget(nameMain,       7, 67, 1, 5);
+    grid.addWidget(nameRef,        8, 67, 1, 5);
+    grid.addWidget(nameSide,       9, 67, 1, 5);
+    grid.addWidget(&lblTime,      10, 67, 1, 5);
+    grid.addWidget(time,          11, 67, 3, 5);
 
     setLayout(&grid);
 
@@ -1038,9 +947,9 @@ void ProtocolWindow::rate_to_png(){
     if(num_fight == NULL)
         return;
     //QPixmap pix(sportsmenRed->width() + rateRed->width() + BallsRed->width() + ResultRed->width() + time->width(), rateRed->height() * 2);
-    QPixmap pix(sportsmenRed->width() + rateRed->width() + BallsRed->width() + ResultRed->width() + time->width() + margin * 2 + spacing * 4,
-                rateRed->height() * 2 + margin * 2 + spacing);
-    render(&pix, QPoint(-sportsmenRed->pos().x() + margin, -sportsmenRed->pos().y() + margin));
+    QPixmap pix(sportsmenRed->width() + rateRed->width() + BallsRed->width() + ResultRed->width() + time->width() + margin + spacing * 4,
+                rateRed->height() * 2 + margin + spacing);
+    render(&pix, QPoint(-sportsmenRed->pos().x() + margin / 2, -sportsmenRed->pos().y() + margin / 2));
 
     QByteArray ba;
     QBuffer buff(&ba);
