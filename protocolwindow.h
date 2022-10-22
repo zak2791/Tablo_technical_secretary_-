@@ -184,19 +184,20 @@ private:
     LeftRightPushButton* btnNkd;
     LeftRightPushButton* btnTNk;
     LeftRightPushButton* btnAr;
-    LeftRightPushButton* btnPs;
+    LeftRightPushButton* btnPs;  
+
     QPushButton* btnBack;
-    //LeftRightPushButton* btn2;
-    //LeftRightPushButton* btn1;
-    //LeftRightPushButton* btnA;
-    //LeftRightPushButton* btn2P;
-    //LeftRightPushButton* btn1P;
-    //LeftRightPushButton* btnAP;
-    //LeftRightPushButton* btnZv;
-    //LeftRightPushButton* btnVyh;
-    //LeftRightPushButton* btnZp;
-    //LeftRightPushButton* btnP1;
-    //LeftRightPushButton* btnP2;
+    LeftRightPushButton* btn2;
+    LeftRightPushButton* btn1;
+    LeftRightPushButton* btnA;
+    LeftRightPushButton* btn2P;
+    LeftRightPushButton* btn1P;
+    LeftRightPushButton* btnAP;
+    LeftRightPushButton* btnZv;
+    LeftRightPushButton* btnVyh;
+    LeftRightPushButton* btnZp;
+    LeftRightPushButton* btnP1;
+    LeftRightPushButton* btnP2;
     LeftRightPushButton* btnNy;
     LeftRightPushButton* btnDoc;
     LeftRightPushButton* btnVin;
@@ -264,7 +265,8 @@ public slots:
     void resetRate(void);
 
 private slots:
-    void Rate(bool, QString);   
+    void Rate(bool, QString);
+    void keyMode(int);
 
 signals:
     void change_prav(int, QString);

@@ -21,6 +21,8 @@
 #include <QCheckBox>
 #include "cameraconnection.h"
 #include "pulttime.h"
+#include "lcdstopwatch.h"
+
 
 class WidgetFilter : public QObject {
     Q_OBJECT
@@ -49,6 +51,7 @@ public:
 
 signals:
     void sendKey(int);
+    void sendKeyMode(int);
     //void setCategory(void);
     //void signalReplay(void);
 
@@ -66,6 +69,7 @@ public slots:
     void setVyh(int, QString);
     void setPrav(int, QString);
     void setRates(int, int, int, int);
+    void resetTimers(void);
 
 private slots:
     void setCam(void);
@@ -93,7 +97,13 @@ private slots:
 
     void connUdp(int, QString);
 
+    void CpuUsage(void);
+
+    void setMode(int);
+    void setKeyMode(int);
+
 private:
+    QLabel* lblCpuUsage;
     QWidget * formView;
     QWidget * frmTime;
     int View;									//вид табло: 0-красно-синий фон,
@@ -126,6 +136,10 @@ private:
     Plus * plus_red;
     Plus * plus_blue;
     LCDTimer * mainTimer;
+    LCDStopwatch * sec_red;
+    LCDStopwatch * sec_blue;
+    LCDStopwatch * sec_red_t;
+    LCDStopwatch * sec_blue_t;
     Ui::frmView ui;
     Ui::Form uiTime;
     QDesktopWidget* desk;
@@ -153,6 +167,8 @@ private:
     QPushButton* btnPlayLastWithSound2;
     QPushButton* btnPlayLastSlowMotion2;
     QPushButton* btnPlaySlowMotion;
+
+    QPushButton* btnQueue;
 
     QString cam1Url = "";
     QString cam2Url = "";

@@ -13,7 +13,7 @@
     <x>0</x>
     <y>0</y>
     <width>363</width>
-    <height>439</height>
+    <height>520</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -25,13 +25,13 @@
   <property name="minimumSize">
    <size>
     <width>363</width>
-    <height>270</height>
+    <height>520</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
     <width>363</width>
-    <height>500</height>
+    <height>520</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -282,7 +282,7 @@
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>240</y>
+     <y>310</y>
      <width>150</width>
      <height>20</height>
     </rect>
@@ -292,7 +292,7 @@
    <property name="geometry">
     <rect>
      <x>192</x>
-     <y>240</y>
+     <y>310</y>
      <width>150</width>
      <height>20</height>
     </rect>
@@ -302,7 +302,7 @@
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>220</y>
+     <y>280</y>
      <width>71</width>
      <height>16</height>
     </rect>
@@ -315,7 +315,7 @@
    <property name="geometry">
     <rect>
      <x>270</x>
-     <y>220</y>
+     <y>280</y>
      <width>71</width>
      <height>16</height>
     </rect>
@@ -396,7 +396,7 @@
    <property name="geometry">
     <rect>
      <x>26</x>
-     <y>272</y>
+     <y>350</y>
      <width>311</width>
      <height>151</height>
     </rect>
@@ -409,7 +409,7 @@
    <property name="geometry">
     <rect>
      <x>100</x>
-     <y>220</y>
+     <y>280</y>
      <width>21</width>
      <height>17</height>
     </rect>
@@ -422,7 +422,7 @@
    <property name="geometry">
     <rect>
      <x>250</x>
-     <y>220</y>
+     <y>280</y>
      <width>21</width>
      <height>17</height>
     </rect>
@@ -435,13 +435,55 @@
    <property name="geometry">
     <rect>
      <x>116</x>
-     <y>217</y>
+     <y>277</y>
      <width>131</width>
      <height>20</height>
     </rect>
    </property>
    <property name="text">
     <string>&lt;---- автонастройка ----&gt;</string>
+   </property>
+  </widget>
+  <widget class="QCheckBox" name="cbKey">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>216</y>
+     <width>321</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Показ только ключевых кадров (уменьшает нагрузку  ЦП)</string>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QCheckBox" name="cbMode">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>250</y>
+     <width>141</width>
+     <height>17</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Режим без протоколов</string>
+   </property>
+  </widget>
+  <widget class="QCheckBox" name="cbKeyMode">
+   <property name="geometry">
+    <rect>
+     <x>190</x>
+     <y>250</y>
+     <width>151</width>
+     <height>17</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Двухцветные кнопки</string>
    </property>
   </widget>
  </widget>

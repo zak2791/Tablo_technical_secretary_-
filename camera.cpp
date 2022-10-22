@@ -6,6 +6,7 @@ Camera::Camera(QObject *parent) : QObject(parent){
     url = QString("");
     file = "";
     flag_record = 0;
+    only_key_frame = true;
 }
 
 void Camera::StartRecord(QString s){
@@ -103,7 +104,8 @@ void Camera::TurnOnCamera(){
                     else flag_record = 2;
                 }
             }
-                int ret;
+                //int ret;
+            if(pkt->flags & AV_PKT_FLAG_KEY || !only_key_frame){
                 ret = avcodec_send_packet(pCodecCtx, pkt);
                 if (ret < 0)
                     goto end_preview;
@@ -123,7 +125,7 @@ void Camera::TurnOnCamera(){
                         emit sigImage(avFrame2QImage(frame));
                     }
                 }
-            //}//if key frame
+            }//if key frame
         }
 
  end_preview:
@@ -181,6 +183,10 @@ end:
     qDebug()<<"av_freep";
 
     emit finished();
+}
+
+void Camera::onlyKeyFrame(bool b){
+    only_key_frame = b;
 }
 
 void Camera::TurnOffCamera(){

@@ -5,6 +5,7 @@
 #include <QSqlDatabase>
 #include <QSqlQuery>
 #include "fight.h"
+#include "pcscreen.h"
 
 int currentX;
 
@@ -108,6 +109,13 @@ ProtocolWindow::ProtocolWindow(QWidget* p) : QWidget(p)
     btnBack->setFocusPolicy(Qt::NoFocus);
     connect(btnBack, SIGNAL(clicked()), this, SLOT(Back()));
 
+    btn2 = new LeftRightPushButton("2", this);
+    btn2->setObjectName("btn2");
+    btn2->setMinimumSize(30, 30);
+    btn2->setFocusPolicy(Qt::NoFocus);
+    //btn2->setStyleSheet("background-color: red; color: white");
+    connect(btn2, SIGNAL(left_right_clicked(bool, QString)), this, SLOT(Rate(bool, QString)));
+
     btn2_red = new LeftRightPushButton("2", this);
     btn2_red->setObjectName("btn2_red");
     btn2_red->setMinimumSize(30, 30);
@@ -121,6 +129,13 @@ ProtocolWindow::ProtocolWindow(QWidget* p) : QWidget(p)
     btn2_blue->setFocusPolicy(Qt::NoFocus);
     btn2_blue->setStyleSheet("background-color: blue; color: white");
     connect(btn2_blue, SIGNAL(left_right_clicked(bool, QString)), this, SLOT(Rate(bool, QString)));
+
+    btn1 = new LeftRightPushButton("1", this);
+    btn1->setObjectName("btn1");
+    btn1->setMinimumSize(30, 30);
+    btn1->setFocusPolicy(Qt::NoFocus);
+    //btn1->setStyleSheet("background-color: red; color: white");
+    connect(btn1, SIGNAL(left_right_clicked(bool, QString)), this, SLOT(Rate(bool, QString)));
 
     btn1_red = new LeftRightPushButton("1", this);
     btn1_red->setObjectName("btn1_red");
@@ -136,6 +151,13 @@ ProtocolWindow::ProtocolWindow(QWidget* p) : QWidget(p)
     btn1_blue->setStyleSheet("background-color: blue; color: white");
     connect(btn1_blue, SIGNAL(left_right_clicked(bool, QString)), this, SLOT(Rate(bool, QString)));
 
+    btnA = new LeftRightPushButton("A", this);
+    btnA->setObjectName("btnA");
+    btnA->setMinimumSize(30, 30);
+    btnA->setFocusPolicy(Qt::NoFocus);
+    //btnA->setStyleSheet("background-color: red; color: white");
+    connect(btnA, SIGNAL(left_right_clicked(bool, QString)), this, SLOT(Rate(bool, QString)));
+
     btnA_red = new LeftRightPushButton("A", this);
     btnA_red->setObjectName("btnA_red");
     btnA_red->setMinimumSize(30, 30);
@@ -149,6 +171,14 @@ ProtocolWindow::ProtocolWindow(QWidget* p) : QWidget(p)
     btnA_blue->setFocusPolicy(Qt::NoFocus);
     btnA_blue->setStyleSheet("background-color: blue; color: white");
     connect(btnA_blue, SIGNAL(left_right_clicked(bool, QString)), this, SLOT(Rate(bool, QString)));
+
+    btn2P = new LeftRightPushButton("", this);
+    btn2P->setObjectName("btn2P");
+    btn2P->setIcon(QIcon("A22.png"));
+    btn2P->setMinimumSize(30, 30);
+    btn2P->setFocusPolicy(Qt::NoFocus);
+    //btn2P->setStyleSheet("background-color: red; color: white");
+    connect(btn2P, SIGNAL(left_right_clicked(bool, QString)), this, SLOT(Rate(bool, QString)));
 
     btn2P_red = new LeftRightPushButton("", this);
     btn2P_red->setObjectName("btn2P_red");
@@ -166,6 +196,14 @@ ProtocolWindow::ProtocolWindow(QWidget* p) : QWidget(p)
     btn2P_blue->setStyleSheet("background-color: blue; color: white");
     connect(btn2P_blue, SIGNAL(left_right_clicked(bool, QString)), this, SLOT(Rate(bool, QString)));
 
+    btn1P = new LeftRightPushButton("", this);
+    btn1P->setObjectName("btn1P");
+    btn1P->setIcon(QIcon("A12.png"));
+    btn1P->setMinimumSize(30, 30);
+    btn1P->setFocusPolicy(Qt::NoFocus);
+    //btn1P->setStyleSheet("background-color: red; color: white");
+    connect(btn1P, SIGNAL(left_right_clicked(bool, QString)), this, SLOT(Rate(bool, QString)));
+
     btn1P_red = new LeftRightPushButton("", this);
     btn1P_red->setObjectName("btn1P_red");
     btn1P_red->setIcon(QIcon("A1.png"));
@@ -181,6 +219,14 @@ ProtocolWindow::ProtocolWindow(QWidget* p) : QWidget(p)
     btn1P_blue->setFocusPolicy(Qt::NoFocus);
     btn1P_blue->setStyleSheet("background-color: blue; color: white");
     connect(btn1P_blue, SIGNAL(left_right_clicked(bool, QString)), this, SLOT(Rate(bool, QString)));
+
+    btnAP = new LeftRightPushButton("", this);
+    btnAP->setObjectName("btnAP");
+    btnAP->setIcon(QIcon("AA2.png"));
+    btnAP->setMinimumSize(30, 30);
+    btnAP->setFocusPolicy(Qt::NoFocus);
+    //btnAP->setStyleSheet("background-color: blue; color: white");
+    connect(btnAP, SIGNAL(left_right_clicked(bool, QString)), this, SLOT(Rate(bool, QString)));
 
     btnAP_red = new LeftRightPushButton("", this);
     btnAP_red->setObjectName("btnAP_red");
@@ -198,6 +244,13 @@ ProtocolWindow::ProtocolWindow(QWidget* p) : QWidget(p)
     btnAP_blue->setStyleSheet("background-color: blue; color: white");
     connect(btnAP_blue, SIGNAL(left_right_clicked(bool, QString)), this, SLOT(Rate(bool, QString)));
 
+    btnZv = new LeftRightPushButton("Зв", this);
+    btnZv->setObjectName("btnZv");
+    btnZv->setMinimumSize(30, 30);
+    btnZv->setFocusPolicy(Qt::NoFocus);
+    //btnZv->setStyleSheet("background-color: red; color: white");
+    connect(btnZv, SIGNAL(left_right_clicked(bool, QString)), this, SLOT(Rate(bool, QString)));
+
     btnZv_red = new LeftRightPushButton("Зв", this);
     btnZv_red->setObjectName("btnZv_red");
     btnZv_red->setMinimumSize(30, 30);
@@ -211,6 +264,13 @@ ProtocolWindow::ProtocolWindow(QWidget* p) : QWidget(p)
     btnZv_blue->setFocusPolicy(Qt::NoFocus);
     btnZv_blue->setStyleSheet("background-color: blue; color: white");
     connect(btnZv_blue, SIGNAL(left_right_clicked(bool, QString)), this, SLOT(Rate(bool, QString)));
+
+    btnVyh = new LeftRightPushButton("В", this);
+    btnVyh->setObjectName("btnVyh");
+    btnVyh->setMinimumSize(30, 30);
+    btnVyh->setFocusPolicy(Qt::NoFocus);
+    //btnVyh->setStyleSheet("background-color: red; color: white");
+    connect(btnVyh, SIGNAL(left_right_clicked(bool, QString)), this, SLOT(Rate(bool, QString)));
 
     btnVyh_red = new LeftRightPushButton("В", this);
     btnVyh_red->setObjectName("btnVyh_red");
@@ -226,6 +286,13 @@ ProtocolWindow::ProtocolWindow(QWidget* p) : QWidget(p)
     btnVyh_blue->setStyleSheet("background-color: blue; color: white");
     connect(btnVyh_blue, SIGNAL(left_right_clicked(bool, QString)), this, SLOT(Rate(bool, QString)));
 
+    btnZp = new LeftRightPushButton("Зп", this);
+    btnZp->setObjectName("btnZp");
+    btnZp->setMinimumSize(30, 30);
+    btnZp->setFocusPolicy(Qt::NoFocus);
+    //btnZp->setStyleSheet("background-color: red; color: white");
+    connect(btnZp, SIGNAL(left_right_clicked(bool, QString)), this, SLOT(Rate(bool, QString)));
+
     btnZp_red = new LeftRightPushButton("Зп", this);
     btnZp_red->setObjectName("btnZp_red");
     btnZp_red->setMinimumSize(30, 30);
@@ -240,6 +307,13 @@ ProtocolWindow::ProtocolWindow(QWidget* p) : QWidget(p)
     btnZp_blue->setStyleSheet("background-color: blue; color: white");
     connect(btnZp_blue, SIGNAL(left_right_clicked(bool, QString)), this, SLOT(Rate(bool, QString)));
 
+    btnP1 = new LeftRightPushButton("П1", this);
+    btnP1->setObjectName("btnP1");
+    btnP1->setMinimumSize(30, 30);
+    btnP1->setFocusPolicy(Qt::NoFocus);
+    //btnP1->setStyleSheet("background-color: red; color: white");
+    connect(btnP1, SIGNAL(left_right_clicked(bool, QString)), this, SLOT(Rate(bool, QString)));
+
     btnP1_red = new LeftRightPushButton("П1", this);
     btnP1_red->setObjectName("btnP1_red");
     btnP1_red->setMinimumSize(30, 30);
@@ -253,6 +327,13 @@ ProtocolWindow::ProtocolWindow(QWidget* p) : QWidget(p)
     btnP1_blue->setFocusPolicy(Qt::NoFocus);
     btnP1_blue->setStyleSheet("background-color: blue; color: white");
     connect(btnP1_blue, SIGNAL(left_right_clicked(bool, QString)), this, SLOT(Rate(bool, QString)));
+
+    btnP2 = new LeftRightPushButton("П2", this);
+    btnP2->setObjectName("btnP2");
+    btnP2->setMinimumSize(30, 30);
+    btnP2->setFocusPolicy(Qt::NoFocus);
+    //btnP2->setStyleSheet("background-color: red; color: white");
+    connect(btnP2, SIGNAL(left_right_clicked(bool, QString)), this, SLOT(Rate(bool, QString)));
 
     btnP2_red = new LeftRightPushButton("П2", this);
     btnP2_red->setObjectName("btnP2_red");
@@ -403,37 +484,37 @@ ProtocolWindow::ProtocolWindow(QWidget* p) : QWidget(p)
     grid.addWidget(btnNy,         3, 18, 3, 3);
     grid.addWidget(btnVin,        3, 21, 3, 3);
 
-    //grid.addWidget(btn2,        1, 24, 4, 4);
+    grid.addWidget(btn2,          1, 24, 4, 4);
     grid.addWidget(btn2_red,      0, 24, 3, 4);
     grid.addWidget(btn2_blue,     3, 24, 3, 4);
-    //grid.addWidget(btn1,        1, 28, 4, 4);
+    grid.addWidget(btn1,          1, 28, 4, 4);
     grid.addWidget(btn1_red,      0, 28, 3, 4);
     grid.addWidget(btn1_blue,     3, 28, 3, 4);
-    //grid.addWidget(btnA,        1, 32, 4, 4);
+    grid.addWidget(btnA,          1, 32, 4, 4);
     grid.addWidget(btnA_red,      0, 32, 3, 4);
     grid.addWidget(btnA_blue,     3, 32, 3, 4);
-    //grid.addWidget(btn2P,       1, 36, 4, 4);
+    grid.addWidget(btn2P,         1, 36, 4, 4);
     grid.addWidget(btn2P_red,     0, 36, 3, 4);
     grid.addWidget(btn2P_blue,    3, 36, 3, 4);
-    //grid.addWidget(btn1P,       1, 40, 4, 4);
+    grid.addWidget(btn1P,         1, 40, 4, 4);
     grid.addWidget(btn1P_red,     0, 40, 3, 4);
     grid.addWidget(btn1P_blue,    3, 40, 3, 4);
-    //grid.addWidget(btnAP,       1, 44, 4, 4);
+    grid.addWidget(btnAP,         1, 44, 4, 4);
     grid.addWidget(btnAP_red,     0, 44, 3, 4);
     grid.addWidget(btnAP_blue,    3, 44, 3, 4);
-    //grid.addWidget(btnZv,       1, 48, 4, 4);
+    grid.addWidget(btnZv,         1, 48, 4, 4);
     grid.addWidget(btnZv_red,     0, 48, 3, 4);
     grid.addWidget(btnZv_blue,    3, 48, 3, 4);
-    //grid.addWidget(btnVyh,      1, 52, 4, 4);
+    grid.addWidget(btnVyh,        1, 52, 4, 4);
     grid.addWidget(btnVyh_red,    0, 52, 3, 4);
     grid.addWidget(btnVyh_blue,   3, 52, 3, 4);
-    //grid.addWidget(btnZp,       1, 56, 4, 4);
+    grid.addWidget(btnZp,         1, 56, 4, 4);
     grid.addWidget(btnZp_red,     0, 56, 3, 4);
     grid.addWidget(btnZp_blue,    3, 56, 3, 4);
-    //grid.addWidget(btnP1,       1, 60, 4, 4);
+    grid.addWidget(btnP1,         1, 60, 4, 4);
     grid.addWidget(btnP1_red,     0, 60, 3, 4);
     grid.addWidget(btnP1_blue,    3, 60, 3, 4);
-    //grid.addWidget(btnP2,       1, 64, 4, 4);
+    grid.addWidget(btnP2,         1, 64, 4, 4);
     grid.addWidget(btnP2_red,     0, 64, 3, 4);
     grid.addWidget(btnP2_blue,    3, 64, 3, 4);
     grid.addWidget(btnBack,       0, 68, 6, 4);
@@ -464,7 +545,83 @@ ProtocolWindow::ProtocolWindow(QWidget* p) : QWidget(p)
     connect(rateRed, SIGNAL(strike(int, int)), this, SLOT(strikeBlue(int, int)));
     connect(rateBlue, SIGNAL(strike(int, int)), this, SLOT(strikeRed(int, int)));
 
+    connect(p, SIGNAL(sendKeyMode(int)), this, SLOT(keyMode(int)));
+
     num_fight = NULL;
+
+    keyMode(0);
+}
+
+void ProtocolWindow::keyMode(int mode){
+    if(mode){
+        btn1->setVisible(false);
+        btn1_red->setVisible(true);
+        btn1_blue->setVisible(true);
+        btn2->setVisible(false);
+        btn2_red->setVisible(true);
+        btn2_blue->setVisible(true);
+        btn1P->setVisible(false);
+        btn1P_red->setVisible(true);
+        btn1P_blue->setVisible(true);
+        btn2P->setVisible(false);
+        btn2P_red->setVisible(true);
+        btn2P_blue->setVisible(true);
+        btnA->setVisible(false);
+        btnA_red->setVisible(true);
+        btnA_blue->setVisible(true);
+        btnAP->setVisible(false);
+        btnAP_red->setVisible(true);
+        btnAP_blue->setVisible(true);
+        btnP1->setVisible(false);
+        btnP1_red->setVisible(true);
+        btnP1_blue->setVisible(true);
+        btnP2->setVisible(false);
+        btnP2_red->setVisible(true);
+        btnP2_blue->setVisible(true);
+        btnZp->setVisible(false);
+        btnZp_red->setVisible(true);
+        btnZp_blue->setVisible(true);
+        btnZv->setVisible(false);
+        btnZv_red->setVisible(true);
+        btnZv_blue->setVisible(true);
+        btnVyh->setVisible(false);
+        btnVyh_red->setVisible(true);
+        btnVyh_blue->setVisible(true);
+    }else{
+        btn1->setVisible(true);
+        btn1_red->setVisible(false);
+        btn1_blue->setVisible(false);
+        btn2->setVisible(true);
+        btn2_red->setVisible(false);
+        btn2_blue->setVisible(false);
+        btn1P->setVisible(true);
+        btn1P_red->setVisible(false);
+        btn1P_blue->setVisible(false);
+        btn2P->setVisible(true);
+        btn2P_red->setVisible(false);
+        btn2P_blue->setVisible(false);
+        btnA->setVisible(true);
+        btnA_red->setVisible(false);
+        btnA_blue->setVisible(false);
+        btnAP->setVisible(true);
+        btnAP_red->setVisible(false);
+        btnAP_blue->setVisible(false);
+        btnP1->setVisible(true);
+        btnP1_red->setVisible(false);
+        btnP1_blue->setVisible(false);
+        btnP2->setVisible(true);
+        btnP2_red->setVisible(false);
+        btnP2_blue->setVisible(false);
+        btnZp->setVisible(true);
+        btnZp_red->setVisible(false);
+        btnZp_blue->setVisible(false);
+        btnZv->setVisible(true);
+        btnZv_red->setVisible(false);
+        btnZv_blue->setVisible(false);
+        btnVyh->setVisible(true);
+        btnVyh_red->setVisible(false);
+        btnVyh_blue->setVisible(false);
+    }
 }
 
 void ProtocolWindow::setMat(QString _mat){
@@ -491,6 +648,9 @@ void ProtocolWindow::Rate(bool _button, QString name){
         item = new ProtocolRates("1", 1, false, false);
         item->setSize(rateRed->height()/5.8, rateRed->height()/3);
         button = true;
+    }else if(name == "btn1"){
+        item = new ProtocolRates("1", 1, false, false);
+        item->setSize(rateRed->height()/5.8, rateRed->height()/3);
     }else if(name == "btnA_red"){
         item = new ProtocolRates("A", "A", false, false);
         item->setSize(rateRed->height()/3.4, rateRed->height()/3);
@@ -499,6 +659,9 @@ void ProtocolWindow::Rate(bool _button, QString name){
         item = new ProtocolRates("A", "A", false, false);
         item->setSize(rateRed->height()/3.4, rateRed->height()/3);
         button = true;
+    }else if(name == "btnA"){
+        item = new ProtocolRates("A", "A", false, false);
+        item->setSize(rateRed->height()/3.4, rateRed->height()/3);
     }else if(name == "NK"){
         item = new ProtocolRates("V", "V", false, false);
         item->setSize(rateRed->height()/3.4, rateRed->height()/3);
@@ -550,7 +713,7 @@ void ProtocolWindow::Rate(bool _button, QString name){
     }else if(name == "Nkd"){
         item = new ProtocolRates("Нкд", 0);
         item->setSize(rateRed->height()/1.7, rateRed->height()/3);
-        pairedItem = new ProtocolRates("2", false, true, 2);
+        pairedItem = new ProtocolRates("2", 2, false, true);
         pairedItem->setSize(rateRed->height()/4.9, rateRed->height()/3);
         pairedItem->setPos(currentX + item->w / 2, rateRed->height()/2);
     }else if(name == "TNK"){
@@ -565,6 +728,9 @@ void ProtocolWindow::Rate(bool _button, QString name){
     }else if(name == "PS"){
         item = new ProtocolRates("Пс", 0);
         item->setSize(rateRed->height()/2.3, rateRed->height()/3);
+    }else if(name == "btn2"){
+        item = new ProtocolRates("2", 2, false, false);
+        item->setSize(rateRed->height()/4.9, rateRed->height()/3);
     }else if(name == "btn2_red"){
         item = new ProtocolRates("2", 2, false, false);
         item->setSize(rateRed->height()/4.9, rateRed->height()/3);
@@ -573,6 +739,9 @@ void ProtocolWindow::Rate(bool _button, QString name){
         item = new ProtocolRates("2", 2, false, false);
         item->setSize(rateRed->height()/4.9, rateRed->height()/3);
         button = true;
+    }else if(name == "btn2P"){
+        item = new ProtocolRates("2", 2, true, false);
+        item->setSize(rateRed->height()/3.0, rateRed->height()/3);
     }else if(name == "btn2P_red"){
         item = new ProtocolRates("2", 2, true, false);
         item->setSize(rateRed->height()/3.0, rateRed->height()/3);
@@ -581,6 +750,9 @@ void ProtocolWindow::Rate(bool _button, QString name){
         item = new ProtocolRates("2", 2, true, false);
         item->setSize(rateRed->height()/3.0, rateRed->height()/3);
         button = true;
+    }else if(name == "btn1P"){
+        item = new ProtocolRates("1", 1, true, false);
+        item->setSize(rateRed->height()/3, rateRed->height()/3);
     }else if(name == "btn1P_red"){
         item = new ProtocolRates("1", 1, true, false);
         item->setSize(rateRed->height()/3, rateRed->height()/3);
@@ -589,6 +761,9 @@ void ProtocolWindow::Rate(bool _button, QString name){
         item = new ProtocolRates("1", 1, true, false);
         item->setSize(rateRed->height()/3, rateRed->height()/3);
         button = true;
+    }else if(name == "btnAP"){
+        item = new ProtocolRates("A", "A", true, false);
+        item->setSize(rateRed->height()/3, rateRed->height()/3);
     }else if(name == "btnAP_red"){
         item = new ProtocolRates("A", "A", true, false);
         item->setSize(rateRed->height()/3, rateRed->height()/3);
@@ -597,6 +772,9 @@ void ProtocolWindow::Rate(bool _button, QString name){
         item = new ProtocolRates("A", "A", true, false);
         item->setSize(rateRed->height()/3, rateRed->height()/3);
         button = true;
+    }else if(name == "btnZv"){
+        item = new ProtocolRates("Зв", "ЗВ", false, false);
+        item->setSize(rateRed->height()/2.3, rateRed->height()/3);
     }else if(name == "btnZv_red"){
         item = new ProtocolRates("Зв", "ЗВ", false, false);
         item->setSize(rateRed->height()/2.3, rateRed->height()/3);
@@ -605,6 +783,12 @@ void ProtocolWindow::Rate(bool _button, QString name){
         item = new ProtocolRates("Зв", "ЗВ", false, false);
         item->setSize(rateRed->height()/2.3, rateRed->height()/3);
         button = true;
+    }else if(name == "btnVyh"){
+        pairedItem = new ProtocolRates("1", 1, false, true);
+        item = new ProtocolRates("В", "В", false, false);
+        item->setSize(rateRed->height()/3.0, rateRed->height()/3);
+        pairedItem->setSize(rateRed->height()/5.8, rateRed->height()/3);
+        pairedItem->setPos(currentX + item->w / 2, rateRed->height()/2);
     }else if(name == "btnVyh_red"){
         pairedItem = new ProtocolRates("1", 1, false, true);
         item = new ProtocolRates("В", "В", false, false);
@@ -619,6 +803,9 @@ void ProtocolWindow::Rate(bool _button, QString name){
         pairedItem->setSize(rateRed->height()/5.8, rateRed->height()/3);
         pairedItem->setPos(currentX + item->w / 2, rateRed->height()/2);
         button = true;
+    }else if(name == "btnZp"){
+        item = new ProtocolRates("Зп", "ЗП", false, false);
+        item->setSize(rateRed->height()/2.3, rateRed->height()/3);
     }else if(name == "btnZp_red"){
         item = new ProtocolRates("Зп", "ЗП", false, false);
         item->setSize(rateRed->height()/2.3, rateRed->height()/3);
@@ -634,6 +821,12 @@ void ProtocolWindow::Rate(bool _button, QString name){
         button = false;
         pairedItem->setSize(rateRed->height()/5.8, rateRed->height()/3);
         pairedItem->setPos(currentX + item->w / 2, rateRed->height()/2);
+    }else if(name == "btnP1"){
+        pairedItem = new ProtocolRates("1", 1, false, true);
+        item = new ProtocolRates("П1", "П1", false, false);
+        item->setSize(rateRed->height()/2.4, rateRed->height()/3);
+        pairedItem->setSize(rateRed->height()/5.8, rateRed->height()/3);
+        pairedItem->setPos(currentX + item->w / 2, rateRed->height()/2);
     }else if(name == "btnP1_blue"){
         pairedItem = new ProtocolRates("1", 1, false, true);
         item = new ProtocolRates("П1", "П1", false, false);
@@ -641,6 +834,12 @@ void ProtocolWindow::Rate(bool _button, QString name){
         button = true;
         pairedItem->setSize(rateRed->height()/5.8, rateRed->height()/3);
         pairedItem->setPos(currentX + item->w / 2, rateRed->height()/2);
+    }else if(name == "btnP2"){
+       pairedItem = new ProtocolRates("2", 2, false, true);
+       item = new ProtocolRates("П2", "П2", false, false);
+       item->setSize(rateRed->height()/2.3, rateRed->height()/3);
+       pairedItem->setSize(rateRed->height()/4.9, rateRed->height()/3);
+       pairedItem->setPos(currentX + item->w / 2, rateRed->height()/2);
      }else if(name == "btnP2_red"){
         pairedItem = new ProtocolRates("2", 2, false, true);
         item = new ProtocolRates("П2", "П2", false, false);
@@ -1011,6 +1210,8 @@ void ProtocolWindow::resetRate(){
     vin = 0;
     calculation();
     rate_to_png();
+    PCScreen* screen = static_cast<PCScreen*>(this->parent());
+    screen->resetTimers();
 }
 
 void ProtocolWindow::showQueue(){

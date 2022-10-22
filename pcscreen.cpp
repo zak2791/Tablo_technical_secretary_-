@@ -18,7 +18,6 @@
 #include <math.h>
 
 #include "category.h"
-#include "lcdstopwatch.h"
 
 #include "protocolwindow.h"
 
@@ -201,7 +200,7 @@ PCScreen::PCScreen(QWidget * parent) : QWidget(parent){
     btnView->setStyleSheet("font: bold " + QString::number(round(btnView->height() / 2)) + "px;");
     //btnView->setFocusPolicy(Qt::NoFocus);
 
-    QPushButton* btnQueue = new QPushButton("Очередь");
+    btnQueue = new QPushButton("Очередь");
     btnQueue->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
     //btnQueue->setFocusPolicy(Qt::NoFocus);
 
@@ -225,19 +224,19 @@ PCScreen::PCScreen(QWidget * parent) : QWidget(parent){
     mainTimer->setObjectName("mainTimer");
     //connect(btnTime, SIGNAL(clicked()), mainTimer, SLOT(StartStop()));
 
-    LCDStopwatch * sec_red = new LCDStopwatch(this, "0:20", QColor(255, 0, 0), QColor(255, 102, 102), true, true);
+    sec_red = new LCDStopwatch(this, "0:20", QColor(255, 0, 0), QColor(255, 102, 102), true, true);
     sec_red->setObjectName("sec_red");
     sec_red->hide();
 
-    LCDStopwatch * sec_blue = new LCDStopwatch(this, "0:20", QColor(0, 0, 255), QColor(102, 102, 255), true, true);
+    sec_blue = new LCDStopwatch(this, "0:20", QColor(0, 0, 255), QColor(102, 102, 255), true, true);
     sec_blue->setObjectName("sec_blue");
     sec_blue->hide();
 
-    LCDStopwatch * sec_red_t = new LCDStopwatch(this, "2:00", QColor(255, 0, 0), QColor(255, 102, 102), true, true);
+    sec_red_t = new LCDStopwatch(this, "2:00", QColor(255, 0, 0), QColor(255, 102, 102), true, true);
     sec_red_t->setObjectName("sec_red_t");
     sec_red_t->hide();
 
-    LCDStopwatch * sec_blue_t = new LCDStopwatch(this, "2:00", QColor(0, 0, 255), QColor(102, 102, 255), true, true);
+    sec_blue_t = new LCDStopwatch(this, "2:00", QColor(0, 0, 255), QColor(102, 102, 255), true, true);
     sec_blue_t->setObjectName("sec_blue_t");
     sec_blue_t->hide();
 
@@ -377,6 +376,11 @@ PCScreen::PCScreen(QWidget * parent) : QWidget(parent){
     lbl2->setAlignment(Qt::AlignCenter);
     lbl2->setStyleSheet("color: white; font-size: 12pt");
 
+    lblCpuUsage = new QLabel;
+    lblCpuUsage->setAlignment(Qt::AlignCenter);
+    lblCpuUsage->setStyleSheet("background-color: black; color: white; font-size: 12pt");
+
+
     //lblTv.hide();
 
     grid = new QGridLayout(this);
@@ -423,6 +427,8 @@ PCScreen::PCScreen(QWidget * parent) : QWidget(parent){
     grid->addWidget(btnView,                0, 38, 2,  6);
 
     grid->addWidget(lbl2,                   4, 24, 2,  20);
+
+    grid->addWidget(lblCpuUsage,            0, 24, 2,  4);
 
 
 
@@ -571,17 +577,19 @@ PCScreen::PCScreen(QWidget * parent) : QWidget(parent){
     camera1->setObjectName("camera1");
     threadCam1 = new QThread;
     camera1->moveToThread(threadCam1);
-    connect(threadCam1, SIGNAL(started()), camera1, SLOT(TurnOnCamera()));
-    connect(camera1, SIGNAL(sigImage(QImage)), viewCam1, SLOT(draw_image(QImage)));
-    connect(camera1, SIGNAL(finished()), this, SLOT(finishedCamera()));
+    connect(threadCam1, SIGNAL(started()),        camera1,  SLOT(TurnOnCamera()));
+    connect(camera1,    SIGNAL(sigImage(QImage)), viewCam1, SLOT(draw_image(QImage)));
+    connect(camera1,    SIGNAL(finished()),       this,     SLOT(finishedCamera()));
+    connect(ui.cbKey,   SIGNAL(toggled(bool)),    camera1,  SLOT(onlyKeyFrame(bool)), Qt::DirectConnection);
 
     camera2 = new Camera;
     camera2->setObjectName("camera2");
     threadCam2 = new QThread;
     camera2->moveToThread(threadCam2);
-    connect(threadCam2, SIGNAL(started()), camera2, SLOT(TurnOnCamera()));
-    connect(camera2, SIGNAL(sigImage(QImage)), viewCam2, SLOT(draw_image(QImage)));
-    connect(camera2, SIGNAL(finished()), this, SLOT(finishedCamera()));
+    connect(threadCam2, SIGNAL(started()),        camera2,  SLOT(TurnOnCamera()));
+    connect(camera2,    SIGNAL(sigImage(QImage)), viewCam2, SLOT(draw_image(QImage)));
+    connect(camera2,    SIGNAL(finished()),       this,     SLOT(finishedCamera()));
+    connect(ui.cbKey,   SIGNAL(toggled(bool)),    camera2,  SLOT(onlyKeyFrame(bool)), Qt::DirectConnection);
 
     connect(mainTimer, SIGNAL(sigStarted(bool)), this, SLOT(StartRecord(bool)));
     connect(mainTimer, SIGNAL(sigReset()), this, SLOT(StopRecord()));
@@ -653,6 +661,51 @@ PCScreen::PCScreen(QWidget * parent) : QWidget(parent){
     connect(sec_red,   SIGNAL(sigStarted(bool)), time, SLOT(stateRed(bool)),   Qt::DirectConnection);
     connect(sec_blue,  SIGNAL(sigStarted(bool)), time, SLOT(stateBlue(bool)),  Qt::DirectConnection);
 
+    QTimer* tmrCpu = new QTimer(this);
+    connect(tmrCpu, SIGNAL(timeout()), this, SLOT(CpuUsage()));
+    tmrCpu->start(1000);
+
+    connect(ui.cbMode,    SIGNAL(stateChanged(int)), this, SLOT(setMode(int)));
+    connect(ui.cbKeyMode, SIGNAL(stateChanged(int)), this, SLOT(setKeyMode(int)));
+}
+
+void PCScreen::resetTimers(){
+    mainTimer->Reset();
+    sec_red->Reset();
+    sec_blue->Reset();
+    sec_red_t->Reset();
+    sec_blue_t->Reset();
+}
+
+void PCScreen::setKeyMode(int mode){
+    sendKeyMode(mode);
+}
+
+void PCScreen::setMode(int mode){
+    if(mode == 2){
+        btnQueue->setEnabled(false);
+    }else{
+        btnQueue->setEnabled(true);
+    }
+}
+
+void PCScreen::CpuUsage(){
+    static ULARGE_INTEGER TimeIdle, TimeKernel, TimeUser;
+    FILETIME Idle, Kernel, User;
+    ULARGE_INTEGER uIdle, uKernel, uUser;
+    GetSystemTimes(&Idle, &Kernel, &User);
+    memcpy(&uIdle, &Idle, sizeof(FILETIME));
+    memcpy(&uKernel, &Kernel, sizeof(FILETIME));
+    memcpy(&uUser, &User, sizeof(FILETIME));
+    long long t;
+    t = (((((uKernel.QuadPart-TimeKernel.QuadPart)+(uUser.QuadPart-TimeUser.QuadPart))-
+        (uIdle.QuadPart-TimeIdle.QuadPart))*(100))/((uKernel.QuadPart-
+            TimeKernel.QuadPart)+(uUser.QuadPart-TimeUser.QuadPart)));
+    TimeIdle.QuadPart = uIdle.QuadPart;
+    TimeUser.QuadPart = uUser.QuadPart;
+    TimeKernel.QuadPart = uKernel.QuadPart;
+    lblCpuUsage->setText(QString::number(t) + " %");
+    //qDebug()<<"cpu usage = "<<t<<"%";
 }
 
 void PCScreen::setPlus(int rb, QString p){
@@ -1064,7 +1117,10 @@ void PCScreen::keyPressEvent(QKeyEvent * pe){
         btnTime->click();
     else if(pe->key() == Qt::Key_C)
         btnParter_blue->click();
-    else
+    else if(pe->key() == Qt::Key_Backspace){
+        if(ui.cbMode->isChecked())
+            sendKey(pe->key());
+    }else
         sendKey(pe->key());
 }
 
