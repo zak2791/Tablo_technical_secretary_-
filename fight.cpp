@@ -8,6 +8,19 @@
 #include <QPainter>
 #include <QTcpSocket>
 #include "protocolwindow.h"
+#include <QWheelEvent>
+
+MouseWheelFilter::MouseWheelFilter(QObject* pobj) : QObject(pobj){
+
+}
+
+bool MouseWheelFilter::eventFilter(QObject* pobj, QEvent* pe){
+    if(pe->type() == QEvent::Wheel){
+        return true;
+    }else
+        return false;
+
+}
 
 Fight::Fight(QString r,
              QString b,
@@ -147,16 +160,22 @@ void Fight::setCombo(){
             cmbMain->setGeometry(401, 40, 159, 20);
             cmbMain->addItems(ref);
             cmbMain->setObjectName("main");
+            cmbMain->setFocusPolicy(Qt::NoFocus);
+            cmbMain->installEventFilter(new MouseWheelFilter(cmbMain));
             connect(cmbMain, SIGNAL(activated(int)), this, SLOT(selectRef(int)));
             cmbRef = new QComboBox(this);
             cmbRef->setGeometry(401, 60, 159, 20);
             cmbRef->addItems(ref);
             cmbRef->setObjectName("ref");
+            cmbRef->setFocusPolicy(Qt::NoFocus);
+            cmbRef->installEventFilter(new MouseWheelFilter(cmbMain));
             connect(cmbRef, SIGNAL(activated(int)), this, SLOT(selectRef(int)));
             cmbSaid = new QComboBox(this);
             cmbSaid->setGeometry(401, 80, 159, 20);
             cmbSaid->addItems(ref);
             cmbSaid->setObjectName("said");
+            cmbSaid->setFocusPolicy(Qt::NoFocus);
+            cmbSaid->installEventFilter(new MouseWheelFilter(cmbMain));
             connect(cmbSaid, SIGNAL(activated(int)), this, SLOT(selectRef(int)));
 
             if(query.next()){

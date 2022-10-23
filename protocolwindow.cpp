@@ -664,7 +664,7 @@ void ProtocolWindow::Rate(bool _button, QString name){
         item->setSize(rateRed->height()/3.4, rateRed->height()/3);
     }else if(name == "NK"){
         item = new ProtocolRates("V", "V", false, false);
-        item->setSize(rateRed->height()/3.4, rateRed->height()/3);
+        item->setSize(rateRed->height()/2.4, rateRed->height()/3);
         pairedItem = new ProtocolRates("Нк", 0, false, true);
         pairedItem->setSize(rateRed->height()/2.4, rateRed->height()/3);
         pairedItem->setPos(currentX + item->w / 2, rateRed->height()/2);
@@ -676,19 +676,19 @@ void ProtocolWindow::Rate(bool _button, QString name){
         item->setSize(rateRed->height()/3.4, rateRed->height()/3);
     }else if(name == "BP"){
         item = new ProtocolRates("V", "V", false, false);
-        item->setSize(rateRed->height()/3.4, rateRed->height()/3);
+        item->setSize(rateRed->height()/2.1, rateRed->height()/3);
         pairedItem = new ProtocolRates("БП", 0, false, true);
         pairedItem->setSize(rateRed->height()/2.1, rateRed->height()/3);
         pairedItem->setPos(currentX + item->w / 2, rateRed->height()/2);
     }else if(name == "Ud"){
         item = new ProtocolRates("V", "V", false, false);
-        item->setSize(rateRed->height()/3.4, rateRed->height()/3);
+        item->setSize(rateRed->height()/2.3, rateRed->height()/3);
         pairedItem = new ProtocolRates("Уд", 0, false, true);
         pairedItem->setSize(rateRed->height()/2.3, rateRed->height()/3);
         pairedItem->setPos(currentX + item->w / 2, rateRed->height()/2);
     }else if(name == "NKT"){
         item = new ProtocolRates("V", "V", false, false);
-        item->setSize(rateRed->height()/3.4, rateRed->height()/3);
+        item->setSize(rateRed->height()/1.35, rateRed->height()/3);
         pairedItem = new ProtocolRates("Нк-Т", 0, false, true);
         pairedItem->setSize(rateRed->height()/1.35, rateRed->height()/3);
         pairedItem->setPos(currentX + item->w / 2, rateRed->height()/2);
@@ -697,7 +697,7 @@ void ProtocolWindow::Rate(bool _button, QString name){
         item->setSize(rateRed->height()/1.28, rateRed->height()/3);
     }else if(name == "YP"){
         item = new ProtocolRates("V", "V", false, false);
-        item->setSize(rateRed->height()/3.4, rateRed->height()/3);
+        item->setSize(rateRed->height()/2.1, rateRed->height()/3);
         pairedItem = new ProtocolRates("ЯП", 0, false, true);
         pairedItem->setSize(rateRed->height()/2.1, rateRed->height()/3);
         pairedItem->setPos(currentX + item->w / 2, rateRed->height()/2);
@@ -718,7 +718,7 @@ void ProtocolWindow::Rate(bool _button, QString name){
         pairedItem->setPos(currentX + item->w / 2, rateRed->height()/2);
     }else if(name == "TNK"){
         item = new ProtocolRates("V", "V", false, false);
-        item->setSize(rateRed->height()/3.4, rateRed->height()/3);
+        item->setSize(rateRed->height()/1.6, rateRed->height()/3);
         pairedItem = new ProtocolRates("ТНк", 0, false, true);
         pairedItem->setSize(rateRed->height()/1.6, rateRed->height()/3);
         pairedItem->setPos(currentX + item->w / 2, rateRed->height()/2);
@@ -1255,6 +1255,7 @@ void ProtocolWindow::selectFight(QString s){
                                      QMessageBox::Ok | QMessageBox::Cancel, this);
     int result = dialog.exec();
     if(result == QMessageBox::Ok){
+
         itemNameRed->setName(obj->red);
         QList<QString> r = obj->red.split("\n");
         if(r.length() > 1){
@@ -1321,7 +1322,6 @@ void ProtocolWindow::selectFight(QString s){
             }
             db_in.close();
         }
-
         resetRate();
         setWeight(obj->title.split(",").at(2));
     }

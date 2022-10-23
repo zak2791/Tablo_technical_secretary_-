@@ -9,6 +9,15 @@
 #include <QSqlQuery>
 #include <QPushButton>
 
+
+class MouseWheelFilter : public QObject {
+protected:
+    virtual bool eventFilter(QObject*, QEvent*);
+
+public:
+    MouseWheelFilter(QObject* pobj = 0);
+};
+
 class ViewFight : public QSplashScreen
 {
 public:

@@ -649,7 +649,7 @@ PCScreen::PCScreen(QWidget * parent) : QWidget(parent){
 
     time = new PultTime;
     time->setObjectName("time");
-    QThread* threadPult = new QThread;
+    threadPult = new QThread;
     time->moveToThread(threadPult);
     connect(threadPult, SIGNAL(started()), time, SLOT(Process()));
     threadPult->start();
@@ -978,6 +978,9 @@ void PCScreen::closeEvent(QCloseEvent *){
         threadCam2->quit();
         threadCam2->wait();
     }
+    time->StopProcess();
+    threadPult->quit();
+    threadPult->wait();
     qApp->quit();
 }
 

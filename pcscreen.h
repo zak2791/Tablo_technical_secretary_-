@@ -183,6 +183,8 @@ private:
     QThread* cam1Thread;
     QThread* cam2Thread;
 
+    QThread* threadPult;
+
     QPointer<CameraConnection> camConn;
 
     QString smat;

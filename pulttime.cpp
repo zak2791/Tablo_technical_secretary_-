@@ -56,6 +56,8 @@ void PultTime::Process(){
                 }
                 FT_Close(ftHandle);
             }
+            if(process == false)
+                break;
         }
 
         while(true){
@@ -102,7 +104,10 @@ void PultTime::Process(){
                 //qDebug()<<"break";
                 break;
             }
-
+            if(process == false){
+                FT_Close(ftHandle);
+                break;
+            }
         }
 
     }
