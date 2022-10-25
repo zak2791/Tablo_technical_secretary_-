@@ -629,9 +629,9 @@ void ProtocolWindow::setMat(QString _mat){
 }
 
 void ProtocolWindow::setAddr(int, QString addr){
-    //if()
-    address = addr;
-    qDebug()<<"setAddress"<<address;
+    if(addr != "")
+        address = addr;
+    //qDebug()<<"setAddress"<<address;
 }
 
 void ProtocolWindow::Rate(bool _button, QString name){

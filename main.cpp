@@ -40,6 +40,7 @@ int main(int argc, char** argv){
                                   "Evaluating error",
                                   result.toString(),
                                   QMessageBox::Yes);
+            return -1;
         }
     }else {
         QMessageBox::critical(0,
