@@ -3,14 +3,12 @@
 #include "JSTools.h"
 #include "pcscreen.h"
 #include "rate.h"
-
+#include <QCoreApplication>
 
 
 
 int main(int argc, char** argv){
     QApplication app(argc, argv);
-
-
 
     PCScreen * pwgt = new PCScreen();
 
