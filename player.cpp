@@ -78,7 +78,7 @@ void Player::Play(){
     oneFrameDuration = durationMedia / numberFrames;
     durationMediaInSecunds = numberFrames / avgFps;
 
-    sigParam(numberFrames, avgFps, durationMediaInSecunds);
+    emit sigParam(numberFrames, avgFps, durationMediaInSecunds);
 
     while (process) {
         if(flag_seek || flag_play || flag_one_next_frame){
@@ -97,7 +97,29 @@ void Player::Play(){
 
             if (pkt->stream_index == best_stream){
                 if(flag_play || flag_one_next_frame)
-                    sigFrame(pkt->pts / oneFrameDuration);
+                    emit sigFrame(pkt->pts / oneFrameDuration);
+                int cel = (pkt->pts / oneFrameDuration) * 0.033;
+                float drob = (pkt->pts / oneFrameDuration) * 0.033 - cel;
+                QString min = "";
+                QString sec = "";
+                QString msec = "";
+                if(cel / 60){
+                    min = QString::number(cel / 60) + ":";
+                    int s = cel % 60;
+                    if(s < 10)
+                        sec = "0" + QString::number(s);
+                    else
+                        sec = QString::number(s);
+                }else{
+                    min = "0:";
+                    if(cel < 10)
+                        sec = "0" + QString::number(cel);
+                    else
+                        sec = QString::number(cel);
+                }
+                msec = QString::number(drob).remove(0, 1);
+
+                emit sigTime(min + sec + msec);
                 ret = avcodec_send_packet(pCodecCtx, pkt);
                 if (ret < 0) {
                     goto end_preview;

@@ -173,8 +173,8 @@ private:
     QString cam1Url = "";
     QString cam2Url = "";
 
-    QString currentFileCam1 = "";
-    QString currentFileCam2 = "";
+    //QString currentFileCam1 = "";
+    //QString currentFileCam2 = "";
 
 
     //Ui::dlgSetUrl ui_url;

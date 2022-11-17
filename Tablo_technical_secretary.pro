@@ -98,10 +98,8 @@ win32: LIBS += -L$$PWD/ffmpeg/lib/ -lswresample
 RESOURCES += \
     res.qrc
 
-
-
-
 win32: LIBS += -L$$PWD/./ -lftd2xx
 
 INCLUDEPATH += $$PWD/.
 DEPENDPATH += $$PWD/.
+
