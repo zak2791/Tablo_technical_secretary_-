@@ -68,7 +68,7 @@ void TcpServer::slotReadClient(){
         pClientSocket->close();
         return;
     }else{
-        if(!query.next()){
+        if(!query.next()){//если нет такого раунда
             for(int i = 1; i < ddd.length(); i++){
                 QList<QString> e = ddd.at(i).split(";");
                 qDebug()<<e;
@@ -85,7 +85,11 @@ void TcpServer::slotReadClient(){
             //out << rnd;
             const char* c = rnd.toUtf8().data();
             pClientSocket->write(c, rnd.length());
-            qDebug()<<"c = " << c;
+            qDebug()<<"раунда нет: c = " << c;
+        }else{//если раунд уже есть
+            const char* c = rnd.toUtf8().data();
+            pClientSocket->write(c, rnd.length());
+            qDebug()<<"раунд есть: c = " << c;
         }
     }
     pClientSocket->close();
