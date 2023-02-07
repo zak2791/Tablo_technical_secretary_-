@@ -33,15 +33,24 @@ void TcpServer::slotReadClient(){
     QTcpSocket* pClientSocket = (QTcpSocket*)sender();
     //QTextStream in(pClientSocket);
     //QByteArray c;
-    QByteArray* ba;
+    QByteArray* ba = new QByteArray;
     while(1){
         int b = pClientSocket->bytesAvailable();
 
         if(!b) break;
-        ba = new QByteArray(pClientSocket->readAll());
-        qDebug()<<"ba = "<<ba->data();
+        ba->append(QByteArray(pClientSocket->readAll()));  //??????????????
+        //qDebug()<<"ba = "<<ba->data();
         //in >> c;
     }
+    int len_data = ba->count();
+    if(QString(ba->at(len_data - 1)) != "&"){   //??????????????????????/
+        qDebug()<<"& NOT OK";
+        return;
+    }
+    qDebug()<<"ba->at(len_data - 1)"<<ba->at(len_data - 1)<<"ba->data() = "<<ba->data();
+    ba->remove(len_data - 1, 1);
+    qDebug()<<"ba->data() = "<<ba->data();
+    //if()
     //qDebug()<<"data = "<<c;
     //QList<QString> dd = QString(c).split("=");
     QList<QString> dd = QString(ba->data()).split("=");
@@ -52,7 +61,7 @@ void TcpServer::slotReadClient(){
     QString rnd = dd.at(0);
     QString rnd_name = dd.at(1);
     QList<QString> ddd = dd.at(2).split("<");
-    qDebug()<<rnd<<rnd_name<<ddd;
+    //qDebug()<<rnd<<rnd_name<<ddd;
     QSqlDatabase db = QSqlDatabase::addDatabase ("QSQLITE");
     db.setDatabaseName("baza_in.db");
     if(!db.open()){
@@ -71,7 +80,7 @@ void TcpServer::slotReadClient(){
         if(!query.next()){//если нет такого раунда
             for(int i = 1; i < ddd.length(); i++){
                 QList<QString> e = ddd.at(i).split(";");
-                qDebug()<<e;
+                //qDebug()<<e;
                 sql = "INSERT INTO rounds (num_round, name_round, name_red, name_blue, note_red, note_blue, num_fight) VALUES ('%1', '%2', '%3', '%4', '%5', '%6', '%7')";
                 QString str = sql.arg(rnd).arg(rnd_name).arg(e.at(0)).arg(e.at(1)).arg(e.at(2)).arg(e.at(3)).arg(e.at(4));
                 QSqlQuery q;
